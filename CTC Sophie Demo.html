@@ -1,0 +1,1132 @@
+<!doctype html><html lang="fr"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>CTC — Cottage Tyre Centre | Votre prochaine route commence ici</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: workshop app — one top bar with tabs, each tab a working screen; site tab is the public face */
+:root{
+  --bg:#ECEEEE; --surface:#FFFFFF; --surface-2:#F4F5F5; --ink:#14181B; --muted:#5A646A; --line:#D4D9DB;
+  --accent:#F2B705; --accent-ink:#14181B; --link:#1C5D99; --ok:#1E8E4E; --warn:#A96C12; --bad:#C0392B;
+  --wa:#1F8F5F; --wa-bg:#E7EFEA; --wa-in:#FFFFFF; --wa-out:#D6F2DF;
+  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:6px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101315; --surface:#191E21; --surface-2:#21272B; --ink:#E8ECED; --muted:#98A3A9; --line:#2E363B;
+  --accent:#F5C02A; --accent-ink:#111416; --link:#86B7E8; --ok:#4CC38A; --warn:#E0A84A; --bad:#EF6F5E;
+  --wa:#4CC38A; --wa-bg:#0F1A15; --wa-in:#1C2521; --wa-out:#1E4431; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101315; --surface:#191E21; --surface-2:#21272B; --ink:#E8ECED; --muted:#98A3A9; --line:#2E363B;
+  --accent:#F5C02A; --accent-ink:#111416; --link:#86B7E8; --ok:#4CC38A; --warn:#E0A84A; --bad:#EF6F5E;
+  --wa:#4CC38A; --wa-bg:#0F1A15; --wa-in:#1C2521; --wa-out:#1E4431; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--ink)}
+body{font:15px/1.5 var(--f-body)}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--link)}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1.05;text-wrap:balance;margin:0;letter-spacing:.01em}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.eyebrow{font:600 12px/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ink);color:var(--bg)}
+.bar-in{display:flex;align-items:center;gap:16px;padding-block:10px;padding-inline:16px;max-width:1280px;margin:auto;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font:700 22px/1 var(--f-display);letter-spacing:.04em}
+.logo svg{flex:none}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.tab{background:none;border:0;color:inherit;opacity:.72;padding:8px 12px;border-radius:var(--r);cursor:pointer;font-weight:500}
+.tab:hover{opacity:1}
+.tab[aria-selected="true"]{opacity:1;background:var(--accent);color:var(--accent-ink)}
+.demo-strip{background:var(--surface-2);border-bottom:1px solid var(--line);font-size:13px}
+.demo-strip .in{max-width:1280px;margin:auto;padding-block:6px;padding-inline:16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:2px 10px;font-size:12px;font-weight:600;background:var(--surface);border:1px solid var(--line);white-space:nowrap}
+.pill.ok{color:var(--ok)} .pill.warn{color:var(--warn)} .pill.bad{color:var(--bad)}
+.dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+
+main{max-width:1280px;margin:auto;padding-block:24px 64px;padding-inline:16px}
+.view[hidden]{display:none!important}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--surface);padding:8px 14px;border-radius:var(--r);cursor:pointer;font-weight:500;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+.btn.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.sm{padding:4px 10px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.field{display:grid;gap:4px;font-size:13px}
+.field input,.field select,.field textarea{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px 10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* SITE */
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center;padding-block:16px 40px}
+.hero h1{font-size:clamp(40px,7vw,76px);text-transform:uppercase}
+.hero h1 em{font-style:normal;background:var(--accent);color:var(--accent-ink);padding:0 .12em}
+.hero p{max-width:52ch;font-size:17px;color:var(--muted)}
+.lang-sw{display:flex;gap:4px}
+.lang-sw button{border:1px solid var(--line);background:var(--surface);padding:3px 9px;border-radius:99px;cursor:pointer;font-size:12px;font-weight:600}
+.lang-sw button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sidewall{position:relative;aspect-ratio:1;max-width:100%;width:420px;justify-self:center}
+.sidewall canvas{width:100%;height:100%;display:block}
+.sec{padding-block:36px;border-top:1px solid var(--line)}
+.sec h2{font-size:clamp(28px,4vw,40px);text-transform:uppercase;margin-bottom:18px}
+.grid-svc{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.svc{padding:16px;display:grid;gap:6px}
+.svc b{font-family:var(--f-display);font-size:22px;letter-spacing:.02em}
+.reader{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:24px;align-items:start}
+.decode{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.decode .seg{padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);min-width:84px}
+.decode .seg .mono{font-size:22px;display:block}
+.decode .seg small{color:var(--muted);font-size:12px;line-height:1.3;display:block}
+.outlets{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.outlet{padding:18px;display:grid;gap:6px}
+.outlet h3{font-size:26px;text-transform:uppercase}
+.promo{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.promo .panel{padding:18px;display:grid;gap:6px}
+.promo .big{font:700 44px/1 var(--f-display)}
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);border:0;border-radius:99px;padding:10px 18px 10px 10px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.25);font-weight:600}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font:700 18px var(--f-display);flex:none}
+
+/* SOPHIE */
+.sophie-layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+.chat{display:flex;flex-direction:column;height:min(78vh,760px);min-height:520px}
+.chat-head{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.chat-log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--surface-2)}
+.msg{max-width:84%;padding:9px 12px;border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.sophie{background:var(--surface);border:1px solid var(--line);border-top-left-radius:3px;align-self:flex-start}
+.msg.client{background:var(--ink);color:var(--bg);border-top-right-radius:3px;align-self:flex-end}
+.msg.sys{align-self:center;font-size:12px;color:var(--muted);background:none;padding:2px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;align-self:flex-start}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:5px 12px;cursor:pointer;font-size:13px}
+.chip:hover{border-color:var(--ink)}
+.chat-in{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}
+.chat-in input{flex:1;min-width:0;border:1px solid var(--line);border-radius:99px;padding:9px 14px;background:var(--surface)}
+.tyres{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-self:stretch}
+.tyre{padding:12px;display:grid;gap:6px;align-content:start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.tyre .tier{font:600 11px/1 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tyre b{font-family:var(--f-display);font-size:21px;line-height:1.05}
+.tyre .price{font:700 24px/1 var(--f-display)}
+.tyre dl{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;margin:0;font-size:12px}
+.tyre dt{color:var(--muted)} .tyre dd{margin:0}
+.tyre.chosen{outline:2px solid var(--accent)}
+.label-eu{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:3px;font:700 12px var(--f-body);color:#fff}
+.doc{align-self:stretch;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:8px}
+.doc table{width:100%;border-collapse:collapse;font-size:13px}
+.doc td,.doc th{padding:4px 0;text-align:left;border-bottom:1px solid var(--line)}
+.doc td.n,.doc th.n{text-align:right;font-variant-numeric:tabular-nums}
+.doc .tot{font:700 22px var(--f-display)}
+.qr{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.qr canvas{width:128px;height:128px;background:#fff;padding:6px;border-radius:4px;border:1px solid var(--line)}
+.phones{display:grid;gap:16px}
+.phone{background:var(--wa-bg);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;max-height:380px}
+.phone-head{background:var(--wa);color:#fff;padding:8px 12px;display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:600;align-items:center}
+.phone-log{padding:10px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;min-height:120px}
+.wa{background:var(--wa-out);padding:7px 10px;border-radius:8px;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere;align-self:flex-end;max-width:92%}
+.wa time{display:block;text-align:right;font-size:10px;color:var(--muted)}
+.wa .act{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.wa input{flex:1;min-width:0;border:1px solid var(--line);border-radius:4px;padding:4px 8px;background:var(--surface);font-size:13px}
+.empty{color:var(--muted);font-size:13px;text-align:center;padding:16px}
+
+/* CRM */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:16px}
+.kpi{padding:14px}
+.kpi .v{font:700 32px/1 var(--f-display)}
+.subtabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px}
+.subtab{border:1px solid var(--line);background:var(--surface);padding:6px 12px;border-radius:var(--r);cursor:pointer}
+.subtab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tbl-wrap{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:720px}
+.tbl th{font:600 12px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl td.n{text-align:right;font-variant-numeric:tabular-nums}
+.st{display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600;border:1px solid currentColor}
+.st.ok{color:var(--ok)} .st.warn{color:var(--warn)} .st.bad{color:var(--bad)} .st.mut{color:var(--muted)}
+.agenda{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.day{padding:12px;display:grid;gap:8px;align-content:start}
+.slot{border-left:3px solid var(--accent);padding:6px 10px;background:var(--surface-2);font-size:13px}
+
+/* campaigns + video */
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px;align-items:start}
+.pad{padding:16px;display:grid;gap:12px}
+.seg-list{display:grid;gap:6px}
+.seg-opt{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r);cursor:pointer;background:var(--surface)}
+.seg-opt[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 3px 0 0 var(--accent)}
+.out{white-space:pre-wrap;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r);padding:12px;font-size:14px;min-height:60px}
+.vid-wrap{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:16px;align-items:start}
+.vid-wrap canvas{width:100%;aspect-ratio:9/16;border-radius:10px;background:#111;display:block;max-width:100%}
+.scenes{display:grid;gap:8px}
+.scene{display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;padding:10px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.scene .t{font:700 20px var(--f-display)}
+.kanban{display:grid;grid-template-columns:repeat(4,minmax(200px,1fr));gap:10px;overflow-x:auto}
+.col{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r);padding:10px;display:grid;gap:8px;align-content:start;min-height:120px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px;font-size:13px;display:grid;gap:6px}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:grid;place-items:center;z-index:50;padding:16px}
+.modal .doc{max-width:620px;width:100%;max-height:88vh;overflow:auto}
+.stamp{justify-self:start;border:2px solid var(--ok);color:var(--ok);font:700 20px var(--f-display);padding:2px 10px;transform:rotate(-4deg);letter-spacing:.08em}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:var(--r);z-index:60;font-size:14px;max-width:calc(100% - 32px)}
+
+@media (max-width:900px){
+  .hero,.reader,.sophie-layout,.two,.vid-wrap{grid-template-columns:1fr}
+  .tyres{grid-template-columns:1fr}
+  .sidewall{width:300px}
+}
+.swatch{width:28px;height:28px;border-radius:50%;border:3px solid var(--line);box-shadow:inset 0 0 0 5px rgba(0,0,0,.25)}
+.bill{display:grid;gap:2px;font-size:13px;min-width:0}
+.chip[aria-pressed="true"]{border-color:var(--ink);font-weight:600;background:var(--surface-2)}
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.shot{margin:0;position:relative;border-radius:var(--r);overflow:hidden;background:var(--surface-2)}
+.shot.wide{grid-column:span 2;grid-row:span 2}
+.shot canvas,.shot img,.cover canvas,.cover img,.ph-slot canvas,.ph-slot img{display:block;width:100%;height:100%;aspect-ratio:4/3;object-fit:cover;max-width:100%}
+.shot figcaption{position:absolute;left:0;right:0;bottom:0;padding:24px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.72));display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.prov{font-size:11px;font-weight:500;border:1px solid rgba(255,255,255,.6);border-radius:99px;padding:1px 7px}
+.reviews{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:12px}
+.rev{margin:0;padding:18px;display:grid;gap:10px;align-content:start}
+.rev blockquote{margin:0;font-size:15px;line-height:1.55}
+.rev figcaption{display:grid;gap:2px;font-size:13px}
+.rev .src{font-size:12px}
+.stars{color:var(--accent);letter-spacing:.08em;font-size:16px}
+.rev-form{margin-top:14px;padding:16px;display:grid;gap:10px;max-width:720px}
+.rev-form textarea{resize:vertical}
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:14px}
+.post{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:grid;grid-template-rows:auto 1fr}
+.post-b{padding:14px 16px 16px;display:grid;gap:8px;align-content:start}
+.post h3{font-size:24px;text-transform:uppercase}
+.post p{margin:0;font-size:14px}
+.article{max-width:720px!important}
+.article p{margin:0;max-width:65ch;line-height:1.65}
+.article .cover{border-radius:var(--r);overflow:hidden;max-height:300px}
+.ph-slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:10px}
+.ph-slot{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:var(--r)}
+.ph-slot canvas,.ph-slot img{border-radius:4px}
+@media (max-width:700px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.shot.wide{grid-column:span 2;grid-row:auto}.shot:last-child{grid-column:span 2}.shot figcaption{font-size:13px}}
+.appts-layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px;padding:12px;align-items:start}
+@media (max-width:900px){.appts-layout{grid-template-columns:1fr}}
+.techs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:12px;padding:12px}
+.tech{padding:16px;display:grid;gap:12px;align-content:start}
+.tstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding-block:10px;border-block:1px solid var(--line)}
+.tv{font:700 24px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.ivs{display:grid;gap:8px}
+.iv{display:grid;gap:4px;padding:8px 10px;background:var(--surface-2);border-radius:var(--r);font-size:14px}
+.rep-in{flex:1;min-width:0;border:1px solid var(--line);border-radius:4px;padding:5px 8px;background:var(--surface);font-size:13px}
+@media (max-width:480px){.tstats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="logo">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="13" fill="none" stroke="var(--accent)" stroke-width="4" stroke-dasharray="4 2.2"/><circle cx="15" cy="15" r="6" fill="var(--accent)"/></svg>
+      CTC · COTTAGE TYRE CENTRE
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" data-view="site" aria-selected="true">Site web</button>
+      <button class="tab" role="tab" data-view="sophie">Sophie</button>
+      <button class="tab" role="tab" data-view="crm">CRM</button>
+      <button class="tab" role="tab" data-view="camp">Campagnes</button>
+      <button class="tab" role="tab" data-view="video">Studio vidéo</button>
+      <button class="tab" role="tab" data-view="blog">Blog</button>
+      <button class="tab" role="tab" data-view="settings">Réglages</button>
+    </nav>
+  </div>
+</header>
+<div class="demo-strip"><div class="in">
+  <span class="pill"><span class="dot" style="color:var(--accent)"></span>Démo Dataworks Innovations</span>
+  <span class="muted">Prix, stock, clients et QR sont des exemples. WhatsApp, email et Juice sont simulés.</span>
+  <span class="pill warn" id="ai-pill"><span class="dot"></span><span id="ai-pill-t">Connexion à l'IA…</span></span>
+</div></div>
+
+<link rel="stylesheet" href="assets/experience.css"><link rel="stylesheet" href="assets/dark.css">
+<main>
+<!-- ============ SITE ============ -->
+<section class="view" id="v-site">
+  <div class="row" style="justify-content:flex-end"><div class="lang-sw" id="site-lang">
+    <button data-l="fr" aria-pressed="true">FR</button><button data-l="en" aria-pressed="false">EN</button><button data-l="kr" aria-pressed="false">KR</button>
+  </div></div>
+  <div class="hero">
+    <div style="display:grid;gap:18px">
+      <span class="eyebrow" data-i="eyebrow">Cottage · Bagatelle — depuis plus de 15 ans</span>
+      <h1 data-i="h1html">Le bon pneu, <em>posé</em> aujourd'hui.</h1>
+      <p data-i="lead">Pneus toutes marques, jantes alliage CTC Wheels, montage et équilibrage. Donnez votre référence à Sophie : elle vous propose trois pneus en stock, vous envoie le devis sur WhatsApp et réserve votre passage.</p>
+      <div class="row">
+        <button class="btn primary" data-go="sophie" data-i="cta">Demander un devis à Sophie</button>
+        <a class="btn" href="#reader" data-i="cta2">Lire ma référence de pneu</a>
+      </div>
+      <div class="row muted" style="font-size:13px"><span>Distributeur Michelin</span>·<span>Jantes 14" à 20"</span>·<span>Salle d'attente climatisée</span></div>
+    </div>
+    <div class="sidewall"><span class="wheel-tag">PERFORMANCE / EXPLOREZ EN 3D</span><div class="wheel-stage" tabindex="0" role="img" aria-label="Pneu 3D interactif : glissez ou utilisez les flèches pour tourner"></div><span class="wheel-hint">GLISSEZ POUR EXPLORER · 360°</span><div class="wheel-controls"><button id="wheel-auto" aria-pressed="true">Ⅱ Pause</button><button id="wheel-front">Face</button><button id="wheel-side">Profil</button><button id="wheel-zoom" aria-pressed="false">＋ Zoom</button></div><canvas id="tyre-canvas" width="840" height="840" aria-label="Flanc de pneu avec la référence 205/55 R16 91V"></canvas></div>
+  </div>
+
+  <div class="brand-track"><small>LE SAVOIR-FAIRE CTC.<br>LA CONFIANCE, À CHAQUE VIRAGE.</small><span>MICHELIN</span><span>CTC WHEELS</span><span>TYRES & SERVICES</span><span>COTTAGE · BAGATELLE</span></div>
+  <div class="sec">
+    <h2 data-i="svcT">Ce qu'on fait à l'atelier</h2>
+    <div class="grid-svc" id="svc-grid"></div>
+  </div>
+
+  <div class="sec">
+    <h2 data-i="galT">L'atelier en images</h2>
+    <div class="gallery" id="gallery"></div>
+  </div>
+
+  <div class="sec" id="reader">
+    <div class="reader">
+      <div style="display:grid;gap:10px">
+        <h2 data-i="readT">Lire le flanc de votre pneu</h2>
+        <p class="muted" data-i="readP">La référence est moulée sur le flanc. Tapez-la ici, ou envoyez une photo à Sophie.</p>
+        <div class="field"><label for="size-in" data-i="readL">Référence</label><input id="size-in" class="mono" value="205/55 R16 91V" autocomplete="off"></div>
+      </div>
+      <div><div class="decode" id="decode"></div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2 data-i="promoT">En ce moment</h2>
+    <div class="promo">
+      <div class="panel"><span class="eyebrow">Promo</span><span class="big">15" & 17"</span><span class="muted" data-i="p1">Jantes 15 et 17 pouces en promotion, dans la limite du stock.</span></div>
+      <div class="panel"><span class="eyebrow">Nouveau</span><span class="big">Bronze 15"</span><span class="muted" data-i="p2">Nouvelle collection de jantes bronze, disponible en magasin.</span></div>
+      <div class="panel"><span class="eyebrow">CTC Wheels</span><span class="big">7 coloris</span><span class="muted" data-i="p3">Choisissez votre coloris, on monte le jour même.</span><button class="btn sm" data-go="sophie" style="justify-self:start">Choisir mes jantes avec Sophie</button></div>
+    </div>
+  </div>
+
+  <div class="sec" id="avis">
+    <div class="row" style="justify-content:space-between;align-items:flex-end;margin-bottom:18px"><h2 data-i="testT" style="margin:0">Ce que disent nos clients</h2><span class="muted" id="rev-summary" style="font-size:13px;max-width:60ch"></span></div>
+    <div class="reviews" id="reviews"></div>
+    <form class="panel rev-form" id="rev-form">
+      <b data-i="revFormT">Vous êtes passé chez nous ? Laissez votre avis</b>
+      <div class="row">
+        <div class="field" style="flex:1;min-width:160px"><label for="rev-name" data-i="revName">Prénom</label><input id="rev-name" autocomplete="given-name"></div>
+        <div class="field"><label for="rev-stars" data-i="revStars">Note</label><select id="rev-stars"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option><option value="2">★★☆☆☆</option><option value="1">★☆☆☆☆</option></select></div>
+      </div>
+      <div class="field"><label for="rev-text" data-i="revText">Votre commentaire</label><textarea id="rev-text" rows="3"></textarea></div>
+      <div class="row"><button class="btn primary" data-i="revSend">Envoyer mon avis</button><span id="rev-thanks" class="st ok" hidden data-i="revThanks">Merci ! Votre avis sera publié après validation.</span></div>
+    </form>
+  </div>
+
+  <div class="sec" id="blog">
+    <h2 data-i="blogT">Conseils & actus</h2>
+    <p class="muted" id="blog-note" hidden style="margin-top:-8px">Articles in French · Artik an franse</p>
+    <div class="blog-grid" id="blog-grid"></div>
+  </div>
+
+  <div class="sec">
+    <h2 data-i="outT">Deux magasins</h2>
+    <div class="outlets">
+      <div class="panel outlet"><h3>Cottage</h3><span>Forbach Road / Royal Road, Cottage</span><span class="mono">WhatsApp 5775 7242 · 5254 7242</span><span class="mono">Tél 260 7600</span><span class="muted" style="font-size:13px" data-i="hours">Horaires : à confirmer avec CTC</span></div>
+      <div class="panel outlet"><h3>Bagatelle</h3><span>Bagatelle Mall</span><span class="mono">WhatsApp 5251 7242</span><span class="muted" style="font-size:13px" data-i="hours">Horaires : à confirmer avec CTC</span></div>
+    </div>
+  </div>
+  <footer class="site-footer"><strong>CTC / COTTAGE TYRE CENTRE</strong><span>Cottage & Bagatelle · Île Maurice</span><span>Visuels d’illustration · Démonstration interactive</span></footer>
+  <button class="fab" data-go="sophie"><span class="avatar">S</span><span data-i="fab">Sophie répond 24h/24</span></button>
+</section>
+
+<!-- ============ SOPHIE ============ -->
+<section class="view" id="v-sophie" hidden>
+  <div class="sophie-layout">
+    <div class="panel chat">
+      <div class="chat-head">
+        <span class="avatar">S</span>
+        <div style="flex:1;min-width:0"><b>Sophie</b> <span class="muted" style="font-size:13px">· assistante CTC</span><div class="muted" style="font-size:12px" id="mode-line">FR · EN · Kreol</div></div>
+        <button class="btn sm" id="chat-reset">Nouvelle conversation</button>
+      </div>
+      <div class="chat-log" id="chat-log" aria-live="polite"></div>
+      <form class="chat-in" id="chat-form"><input id="chat-input" placeholder="Écrivez à Sophie…" autocomplete="off"><button class="btn primary" id="chat-send">Envoyer</button></form>
+    </div>
+    <div class="phones">
+      <div class="phone"><div class="phone-head"><span>WhatsApp client</span><span id="wa-client-name" class="mono" style="font-weight:500"></span></div><div class="phone-log" id="wa-client"></div></div>
+      <div class="phone"><div class="phone-head"><span>WhatsApp comptable</span><span id="wa-acc-num" class="mono" style="font-weight:500"></span></div><div class="phone-log" id="wa-acc"></div></div>
+      <div class="phone"><div class="phone-head" style="background:var(--warn)"><span>WhatsApp techniciens</span><span class="mono" style="font-weight:500">Cottage · Bagatelle</span></div><div class="phone-log" id="wa-tech"></div></div>
+      <div class="phone"><div class="phone-head" style="background:var(--link)"><span>Boîte d'envoi email</span><span class="mono" style="font-weight:500">sophie@ctc.mu</span></div><div class="phone-log" id="mail-log"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CRM ============ -->
+<section class="view" id="v-crm" hidden>
+  <div class="kpis" id="kpis"></div>
+  <div class="subtabs" id="crm-tabs">
+    <button class="subtab" data-s="clients" aria-selected="true">Clients</button>
+    <button class="subtab" data-s="quotes" aria-selected="false">Devis</button>
+    <button class="subtab" data-s="appts" aria-selected="false">Rendez-vous</button>
+    <button class="subtab" data-s="techs" aria-selected="false">Techniciens</button>
+    <button class="subtab" data-s="invoices" aria-selected="false">Factures & paiements</button>
+    <button class="subtab" data-s="reviews" aria-selected="false">Avis clients</button>
+  </div>
+  <div class="panel" id="crm-body"></div>
+</section>
+
+<!-- ============ CAMPAIGNS ============ -->
+<section class="view" id="v-camp" hidden>
+  <div class="two">
+    <div class="panel pad">
+      <h2 style="font-size:28px;text-transform:uppercase">Cibler</h2>
+      <div class="seg-list" id="seg-list"></div>
+      <div class="field"><label for="camp-goal">Objectif de la campagne</label>
+        <select id="camp-goal">
+          <option>Relance remplacement de pneus</option>
+          <option>Promo jantes 15" & 17"</option>
+          <option>Contrôle gratuit avant les vacances</option>
+          <option>Nouvelle collection bronze 15"</option>
+        </select></div>
+      <div class="field"><label for="camp-lang">Langue</label><select id="camp-lang"><option value="fr">Français</option><option value="en">English</option><option value="kr">Kreol morisien</option><option value="auto">Langue de chaque client</option></select></div>
+      <button class="btn primary" id="camp-gen">Générer la campagne avec Sophie</button>
+    </div>
+    <div class="panel pad">
+      <div class="row" style="justify-content:space-between"><h2 style="font-size:28px;text-transform:uppercase">Messages</h2><span class="muted" id="camp-count"></span></div>
+      <div><span class="eyebrow">WhatsApp</span><div class="out" id="camp-wa">Choisissez un segment et générez la campagne.</div></div>
+      <div><span class="eyebrow">Email</span><div class="out" id="camp-mail"></div></div>
+      <div class="row"><button class="btn dark" id="camp-send" disabled>Envoyer au segment (simulation)</button><span class="muted" style="font-size:13px">Les messages sont personnalisés avec le prénom, la voiture et la taille de pneu.</span></div>
+      <div><span class="eyebrow">Historique</span><div id="camp-hist" class="muted" style="font-size:14px"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VIDEO ============ -->
+<section class="view" id="v-video" hidden>
+  <div class="two" style="margin-bottom:16px">
+    <div class="panel pad">
+      <h2 style="font-size:28px;text-transform:uppercase">Brief vidéo</h2>
+      <div class="field"><label for="vid-topic">Sujet</label><input id="vid-topic" value="Promo jantes 15&quot; et 17&quot; — collection bronze"></div>
+      <div class="row">
+        <div class="field" style="flex:1"><label for="vid-plat">Plateforme</label><select id="vid-plat"><option>TikTok</option><option>Facebook Reels</option></select></div>
+        <div class="field" style="flex:1"><label for="vid-lang">Langue</label><select id="vid-lang"><option value="kr">Kreol</option><option value="fr">Français</option><option value="en">English</option></select></div>
+        <div class="field" style="flex:1"><label for="vid-len">Durée</label><select id="vid-len"><option>15 s</option><option selected>30 s</option><option>45 s</option></select></div>
+      </div>
+      <button class="btn primary" id="vid-gen">Écrire le script</button>
+      <p class="muted" style="font-size:13px;margin:0">Sophie écrit le hook, les plans, le texte à l'écran, la voix off et les hashtags. L'aperçu anime le texte ; les vraies images viennent du tournage en magasin.</p>
+    </div>
+    <div class="panel pad">
+      <div class="vid-wrap">
+        <div style="display:grid;gap:8px"><canvas id="vid-canvas" width="540" height="960"></canvas><button class="btn sm" id="vid-play">Lire l'aperçu</button></div>
+        <div style="display:grid;gap:10px;min-width:0">
+          <div><span class="eyebrow">Hook</span><div id="vid-hook" style="font:700 24px var(--f-display)"></div></div>
+          <div class="scenes" id="vid-scenes"></div>
+          <div><span class="eyebrow">Légende</span><div class="out" id="vid-cap"></div></div>
+          <button class="btn" id="vid-add" disabled>Ajouter au planning</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel pad"><h2 style="font-size:28px;text-transform:uppercase">Planning de contenu</h2><div class="kanban" id="kanban"></div></div>
+</section>
+
+<!-- ============ BLOG ============ -->
+<section class="view" id="v-blog" hidden>
+  <div class="two">
+    <div class="panel pad">
+      <h2 style="font-size:28px;text-transform:uppercase">Nouvel article</h2>
+      <div class="field"><label for="post-topic">Sujet</label><input id="post-topic" value="Pneus rechapés : pour qui et à quel prix ?"></div>
+      <div class="field"><label for="post-angle">Angle</label><select id="post-angle"><option>Conseil pratique pour les particuliers</option><option>Guide pour les flottes d'entreprise</option><option>Actualité du magasin et promotions</option><option>Question fréquente posée à Sophie</option></select></div>
+      <button class="btn primary" id="post-gen">Écrire l'article avec Sophie</button>
+      <div class="out" id="post-prev" style="display:grid;gap:10px"><span class="muted">L'aperçu de l'article s'affiche ici. Vous le relisez, l'enregistrez en brouillon puis le publiez sur le site.</span></div>
+    </div>
+    <div class="panel pad">
+      <h2 style="font-size:28px;text-transform:uppercase">Articles</h2>
+      <span class="muted" style="font-size:13px">Chaque article publié apparaît dans « Conseils & actus » sur le site. Il peut devenir une vidéo TikTok ou une campagne WhatsApp en un clic.</span>
+      <div class="ivs" id="post-list"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SETTINGS ============ -->
+<section class="view" id="v-settings" hidden>
+  <div class="panel pad" style="max-width:760px">
+    <h2 style="font-size:28px;text-transform:uppercase">Réglages de la démo</h2>
+    <div class="field"><label for="set-acc">WhatsApp du comptable</label><input id="set-acc" class="mono"></div>
+    <div class="field"><label for="set-vat">TVA (%)</label><input id="set-vat" type="number" min="0" max="30"></div>
+    <div class="row"><div class="field" style="flex:1"><label for="set-remind">Heure des relances J-1</label><input id="set-remind" type="time" class="mono"></div><div class="field" style="flex:1"><label for="set-filln">Clients contactés par créneau libéré</label><input id="set-filln" type="number" min="1" max="10"></div></div>
+    <div class="field"><label for="set-bank">Coordonnées bancaires (virement)</label><input id="set-bank" class="mono"></div>
+    <div class="field"><label for="set-juice">Lien de paiement Juice / MauCAS (affiché sur la facture)</label><input id="set-juice" class="mono"></div>
+    <div class="row"><button class="btn primary" id="set-save">Enregistrer</button><button class="btn" id="set-reset">Réinitialiser toutes les données</button></div>
+    <h3 style="font-size:22px;text-transform:uppercase;margin-top:8px">Photos du site</h3>
+    <span class="muted" style="font-size:13px">Remplacez les visuels provisoires par les vraies photos de CTC (Facebook, TikTok, téléphone). Elles sont réduites automatiquement.</span>
+    <div class="ph-slots" id="photo-slots"></div>
+    <p class="muted" style="font-size:13px;margin:0">Les données de la démo restent dans ce navigateur. En production : base MySQL sur LWS, API WhatsApp Business (Meta), envoi d'emails (Brevo) et QR MauCAS de la banque de CTC. Les pièces d'identité sont stockées chiffrées, avec accès limité à la facturation (Data Protection Act 2017).</p>
+  </div>
+</section>
+</main>
+<div id="modal-root"></div>
+
+<script>
+/* ---------------- helpers ---------------- */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const h=(tag,attrs={},...kids)=>{const e=document.createElement(tag);for(const[k,v]of Object.entries(attrs)){if(k==='class')e.className=v;else if(k.startsWith('on'))e.addEventListener(k.slice(2),v);else if(v!==false&&v!=null)e.setAttribute(k,v)}for(const c of kids.flat()){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)))}return e};
+const rs=n=>'Rs '+Math.round(n).toLocaleString('en-US');
+const now=()=>new Date();
+const hhmm=d=>new Date(d).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+const dstr=d=>new Date(d).toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
+const uid=()=>Math.random().toString(36).slice(2,9);
+function toast(t){$$('.toast').forEach(x=>x.remove());const e=h('div',{class:'toast'},t);document.body.append(e);setTimeout(()=>e.remove(),2600)}
+
+/* ---------------- catalogue (exemples) ---------------- */
+const TIERS=[
+ {id:'eco',label:{fr:'Économique',en:'Budget',kr:'Ekonomik'},brand:'Linglong',model:'GreenMax HP010',wet:'C',noise:71,warranty:'1 an',use:{fr:'Ville, petit budget',en:'City, tight budget',kr:'Lavil, pti bidze'}},
+ {id:'std',label:{fr:'Équilibré',en:'Balanced',kr:'Balanse'},brand:'Hankook',model:'Kinergy Eco 2',wet:'B',noise:69,warranty:'2 ans',use:{fr:'Usage quotidien, longue durée',en:'Daily use, long life',kr:'Tou le zour, dire lontan'}},
+ {id:'prem',label:{fr:'Premium',en:'Premium',kr:'Premium'},brand:'Michelin',model:'Primacy 4+',wet:'A',noise:68,warranty:'3 ans',use:{fr:'Freinage sur mouillé, confort',en:'Wet braking, comfort',kr:'Fren lor lapli, konfor'}}];
+const PRICE={13:[1800,2400,3900],14:[2100,2900,4700],15:[2450,3350,5400],16:[3100,4200,6600],17:[3800,5100,7900],18:[4600,6200,9400],19:[5600,7400,11200],20:[6500,8600,12900]};
+const WETC={A:'#1E8E4E',B:'#6DAA2C',C:'#C8A200'};
+function parseSize(s){const m=String(s||'').match(/(\d{3})\s*\/\s*(\d{2})\s*Z?R?\s*(\d{2})/i);if(!m)return null;return{w:+m[1],a:+m[2],r:+m[3],str:`${m[1]}/${m[2]}R${m[3]}`}}
+function offers(size){const p=parseSize(size);if(!p)return[];const row=PRICE[p.r]||PRICE[16];const wAdj=p.w>=215?1.12:p.w<=175?0.92:1;
+  return TIERS.map((t,i)=>({...t,size:p.str,price:Math.round(row[i]*wAdj/50)*50,stock:{cottage:4+((p.w+i*7)%14),bagatelle:(p.a+i*5)%9}}))}
+
+/* ---------------- i18n (site + Sophie templates) ---------------- */
+const I={
+ fr:{eyebrow:"Cottage · Bagatelle — pneus, jantes, atelier",h1html:"Le bon pneu, <em>posé</em> aujourd'hui.",lead:"Pneus toutes marques, jantes alliage CTC Wheels, montage et équilibrage. Donnez votre référence à Sophie : elle vous propose trois pneus en stock, vous envoie le devis sur WhatsApp et réserve votre passage.",cta:"Demander un devis à Sophie",cta2:"Lire ma référence de pneu",svcT:"Ce qu'on fait à l'atelier",readT:"Lire le flanc de votre pneu",readP:"La référence est moulée sur le flanc. Tapez-la ici, ou envoyez-la à Sophie.",readL:"Référence",promoT:"En ce moment",p1:"Jantes 15 et 17 pouces en promotion, dans la limite du stock.",p2:"Nouvelle collection de jantes bronze, disponible en magasin.",p3:"Choisissez votre coloris, on monte le jour même.",outT:"Deux magasins",hours:"Horaires : à confirmer avec CTC",fab:"Sophie répond 24h/24",galT:"L'atelier en images",testT:"Ce que disent nos clients",blogT:"Conseils & actus",revFormT:"Vous êtes passé chez nous ? Laissez votre avis",revName:"Prénom",revStars:"Note",revText:"Votre commentaire",revSend:"Envoyer mon avis",revThanks:"Merci ! Votre avis sera publié après validation.",
+  svc:[["Pneus","Toutes marques, du 13\" au 20\", neufs et rechapés."],["Jantes alliage","CTC Wheels : 7 coloris, collection bronze 15\"."],["Montage","Démontage, remontage, valves neuves."],["Équilibrage","Équilibrage de précision à chaque pose."],["Réparation","Crevaison, chambres à air, kits de réparation."],["Après-vente","Suivi pneus et jantes, analyse d'usure."]],
+  dec:{w:"Largeur (mm)",a:"Hauteur du flanc (% de la largeur)",r:"Radial",d:"Diamètre de jante (pouces)",li:"Indice de charge",sp:"Indice de vitesse",kg:"kg par pneu",kmh:"km/h max"}},
+ en:{eyebrow:"Cottage · Bagatelle — tyres, rims, workshop",h1html:"The right tyre, <em>fitted</em> today.",lead:"All tyre brands, CTC Wheels alloy rims, fitting and balancing. Give Sophie your tyre size: she offers three tyres in stock, sends the quote on WhatsApp and books your slot.",cta:"Get a quote from Sophie",cta2:"Read my tyre size",svcT:"What we do in the workshop",readT:"Read your tyre sidewall",readP:"The size is moulded on the sidewall. Type it here, or send it to Sophie.",readL:"Tyre size",promoT:"Right now",p1:"15 and 17 inch rims on promotion while stocks last.",p2:"New bronze rim collection, in store now.",p3:"Pick your colour, fitted the same day.",outT:"Two stores",hours:"Opening hours: to be confirmed with CTC",fab:"Sophie answers 24/7",galT:"Inside the workshop",testT:"What our customers say",blogT:"Tips & news",revFormT:"Been to see us? Leave a review",revName:"First name",revStars:"Rating",revText:"Your comment",revSend:"Send my review",revThanks:"Thank you! Your review will be published once approved.",
+  svc:[["Tyres","All brands, 13\" to 20\", new and retread."],["Alloy rims","CTC Wheels: 7 colours, bronze 15\" collection."],["Fitting","Demounting, remounting, new valves."],["Balancing","Precision balancing with every fitting."],["Repairs","Punctures, inner tubes, repair kits."],["After-sales","Tyre and rim follow-up, wear analysis."]],
+  dec:{w:"Width (mm)",a:"Sidewall height (% of width)",r:"Radial",d:"Rim diameter (inches)",li:"Load index",sp:"Speed rating",kg:"kg per tyre",kmh:"km/h max"}},
+ kr:{eyebrow:"Cottage · Bagatelle — pne, zant, atelye",h1html:"Bon pne-la, <em>poze</em> zordi.",lead:"Pne tou mark, zant CTC Wheels, monte ek balansaz. Donn Sophie referans ou pne: li propoz ou trwa pne ki ena dan stok, li avoy ou devi lor WhatsApp ek li rezerv ou ler.",cta:"Demann Sophie enn devi",cta2:"Lir referans mo pne",svcT:"Seki nou fer dan atelye",readT:"Lir referans lor ou pne",readP:"Referans-la ekrir lor kote pne-la. Tap li isi, ouswa avoy li Sophie.",readL:"Referans",promoT:"La aster",p1:"Zant 15 ek 17 pous an promo, ziska stok fini.",p2:"Nouvo koleksion zant bronz, dan magazin.",p3:"Swazir ou koler, nou monte li mem zour.",outT:"De magazin",hours:"Lör: pou konfirme ar CTC",fab:"Sophie reponn 24/24",galT:"Atelye-la an imaz",testT:"Seki nou klian dir",blogT:"Konsey ek nouvel",revFormT:"Ou finn vinn kot nou? Les ou avi",revName:"Premie non",revStars:"Not",revText:"Ou komanter",revSend:"Avoy mo avi",revThanks:"Mersi! Ou avi pou pibliye apre validasion.",
+  svc:[["Pne","Tou mark, 13\" ziska 20\", nef ek resape."],["Zant alyaz","CTC Wheels: 7 koler, koleksion bronz 15\"."],["Monte","Demonte, remonte, nouvo valv."],["Balansaz","Balansaz presi ar sak poz."],["Reparasion","Kreve, lasam, kit reparasion."],["Apre-vant","Swivi pne ek zant, analiz lizir."]],
+  dec:{w:"Larzer (mm)",a:"Otter kote (% larzer)",r:"Radial",d:"Diamet zant (pous)",li:"Indis sarz",sp:"Indis vites",kg:"kg sak pne",kmh:"km/h max"}}};
+const LI={75:387,79:437,82:475,84:500,86:530,87:545,88:560,89:580,91:615,94:670,95:690,97:730,98:750,100:800,102:850,104:900,108:1000,112:1120};
+const SP={H:210,V:240,W:270,Y:300,T:190,S:180,R:170,Q:160};
+
+const T={ // Sophie scripted lines
+ fr:{hello:"Bonjour ! Je suis Sophie de Cottage Tyre Centre 👋 Je peux vous trouver le bon pneu et vous envoyer un devis. Comment vous appelez-vous ?",askPhone:n=>`Enchantée ${n} ! Quel est votre numéro WhatsApp ?`,askEmail:"Merci. Une adresse email pour recevoir le devis ? (ou écrivez « non »)",askCar:"Quelle voiture avez-vous ? Marque, modèle et année.",askSize:"Quelle est la référence de vos pneus ? Elle est écrite sur le flanc, par ex. 195/65R15.",badSize:"Je n'ai pas reconnu la référence. Elle ressemble à 195/65R15 — trois chiffres, une barre, deux chiffres, R et le diamètre.",offers:s=>`Voici trois pneus disponibles en ${s}. Prix TTC par pneu, montage et équilibrage compris :`,qty:"Combien de pneus voulez-vous ?",quote:"Voici votre devis. Je vous l'envoie où ?",sentWa:"C'est envoyé sur votre WhatsApp ✅",sentMail:"C'est envoyé par email ✅",confirmQ:"Parfait ! Dans quel magasin et à quel moment voulez-vous passer ?",booked:(d,o)=>`C'est réservé : ${d} à ${o}. Voici votre facture à régler avec Juice (scan to pay). Vous recevrez la facture acquittée dès réception du paiement.`,paid:"Paiement bien reçu, merci ! Voici votre facture acquittée. À bientôt chez CTC 🛞",outlet:"Magasin",later:"Plus tard"},
+ en:{hello:"Hi! I'm Sophie from Cottage Tyre Centre 👋 I can find the right tyre and send you a quote. What's your name?",askPhone:n=>`Nice to meet you ${n}! What's your WhatsApp number?`,askEmail:"Thanks. An email address for the quote? (or type \"no\")",askCar:"Which car do you drive? Make, model and year.",askSize:"What's your tyre size? It's on the sidewall, e.g. 195/65R15.",badSize:"I couldn't read that size. It looks like 195/65R15: three digits, a slash, two digits, R and the rim size.",offers:s=>`Here are three tyres in stock in ${s}. Price per tyre incl. VAT, fitting and balancing included:`,qty:"How many tyres do you need?",quote:"Here's your quote. Where should I send it?",sentWa:"Sent to your WhatsApp ✅",sentMail:"Sent by email ✅",confirmQ:"Great! Which store and when would you like to come?",booked:(d,o)=>`Booked: ${d} at ${o}. Here's your invoice to pay with Juice (scan to pay). You'll get the paid invoice as soon as payment is received.`,paid:"Payment received, thank you! Here's your paid invoice. See you at CTC 🛞",outlet:"Store",later:"Later"},
+ kr:{hello:"Bonzour! Mo Sophie, Cottage Tyre Centre 👋 Mo kapav trouv ou bon pne ek avoy ou enn devi. Ki ou non?",askPhone:n=>`Enchante ${n}! Ki ou nimero WhatsApp?`,askEmail:"Mersi. Enn adres email pou gagn devi-la? (ouswa ekrir « non »)",askCar:"Ki loto ou ena? Mark, model ek lane.",askSize:"Ki referans ou pne? Li ekrir lor kote pne-la, par egzanp 195/65R15.",badSize:"Mo pa finn rekonet referans-la. Li resanble 195/65R15.",offers:s=>`Ala trwa pne ki ena dan stok an ${s}. Pri TTC sak pne, monte ek balansaz inkli:`,qty:"Komie pne ou bizin?",quote:"Ala ou devi. Kot mo avoy li?",sentWa:"Mo finn avoy li lor ou WhatsApp ✅",sentMail:"Mo finn avoy li par email ✅",confirmQ:"Top! Dan ki magazin ek kan ou anvi vini?",booked:(d,o)=>`Rezerve: ${d} dan ${o}. Ala ou fakir pou pey ar Juice (scan to pay). Ou pou gagn fakir aste kan nou gagn peyman-la.`,paid:"Nou finn gagn ou peyman, mersi! Ala ou fakir aste. Anou zwenn kot CTC 🛞",outlet:"Magazin",later:"Pli tar"}};
+
+/* ---------------- state ---------------- */
+const KEY='ctc-demo-v3';
+function daysAgo(n){return new Date(Date.now()-n*864e5).toISOString()}
+function atDay(off,hh,mm){const d=new Date();d.setHours(hh,mm,0,0);return new Date(d.getTime()+off*864e5).toISOString()}
+function seed(){
+ const cars=[["Ravi Ramdin","Toyota Vitz 2016","175/65R14","kr","Cottage",620],["Priya Gopaul","Nissan Note 2018","185/65R15","fr","Cottage",540],["Kevin Lam","Honda Fit 2017","185/55R16","en","Bagatelle",210],["Nadia Joomun","Suzuki Swift 2019","185/55R16","fr","Bagatelle",700],["Jean-Marc Legrand","Toyota Hilux 2020","265/65R17","fr","Cottage",390],["Ashvin Boodhoo","Mazda Demio 2015","185/65R15","kr","Cottage",810],["Sandra Perrine","Kia Picanto 2021","175/65R14","fr","Bagatelle",95],["Yusuf Peerbux","Hyundai Tucson 2019","225/60R17","en","Cottage",560],["Mélanie Li Kwong","BMW 320i 2018","225/45R17","fr","Bagatelle",430],["Deepak Seetohul","Toyota Axio 2016","185/65R15","kr","Cottage",690],["Christelle Rose","Nissan X-Trail 2017","225/65R17","fr","Bagatelle",150],["Anil Ramsahye","Mitsubishi Triton 2019","245/70R16","kr","Cottage",600]];
+ const towns=['Grand Baie','Goodlands','Triolet','Rivière du Rempart','Port Louis','Pamplemousses','Grand Gaube','Quatre Bornes','Moka','Cottage','Terre Rouge',"Poudre d'Or"];
+ const clients=cars.map((c,i)=>({id:'c'+(i+1),name:c[0],phone:`+230 5700 ${String(1100+i*7).padStart(4,'0')}`,email:c[0].toLowerCase().normalize('NFD').replace(/[^a-z ]/g,'').split(' ').join('.')+'@exemple.mu',car:c[1],size:c[2],lang:c[3],outlet:c[4],lastPurchase:daysAgo(c[5]),source:'Import',example:true,created:daysAgo(c[5]+3),type:'ind',address:`${towns[i]} (exemple)`,idDoc:null}));
+ clients[4].type='biz';clients[4].company={name:'Legrand Transport Ltd',brn:'C07012345',vat:'27012345'};
+ clients[7].type='biz';clients[7].company={name:'Peerbux Trading Co. Ltd',brn:'C11054321',vat:'27054321'};
+ const techs=[{id:'t1',name:'Rajesh',outlet:'Cottage',wa:'+230 5700 2001',skills:'Pneus, équilibrage'},{id:'t2',name:'Vikash',outlet:'Cottage',wa:'+230 5700 2002',skills:'Jantes, montage'},{id:'t3',name:'Jonathan',outlet:'Bagatelle',wa:'+230 5700 2003',skills:'Pneus, réparation'},{id:'t4',name:'Imran',outlet:'Bagatelle',wa:'+230 5700 2004',skills:'Jantes, équilibrage'}];
+ const notes=['Usure régulière, pression ajustée à 2,3 bar.','Valves remplacées, équilibrage OK.','Jantes montées, serrage au couple vérifié.','Pneu arrière réparé, remplacement conseillé sous 3 mois.','Usure bord intérieur : parallélisme à contrôler.'];
+ const appts=[];
+ for(let i=0;i<14;i++){const c=clients[i%12];const outlet=i%2?'Bagatelle':'Cottage';const tech=techs.filter(t=>t.outlet===outlet)[Math.floor(i/2)%2];const kind=i%3===0?'rims':'tyres';const qty=kind==='rims'?4:(i%2?2:4);
+  appts.push({id:'a'+i,cid:c.id,when:atDay(-(i*2+1),[8,10,13,15][i%4],30),outlet,techId:tech.id,kind,qty,amount:qty*(kind==='rims'?5400:3400),service:(kind==='rims'?'Pose jantes ':'Pose pneus ')+`${c.size} × ${qty}`,status:'Terminé',report:notes[i%5],example:true})}
+ appts.push({id:'a90',cid:clients[2].id,when:atDay(1,10,30),outlet:'Bagatelle',techId:'t3',kind:'tyres',qty:2,amount:6700,service:`Pose pneus ${clients[2].size} × 2`,status:'Planifié',report:'',example:true});
+ appts.push({id:'a91',cid:clients[5].id,when:atDay(1,8,30),outlet:'Cottage',techId:'t1',kind:'tyres',qty:4,amount:13400,service:`Pose pneus ${clients[5].size} × 4`,status:'Planifié',report:'',example:true});
+ appts.push({id:'a92',cid:clients[9].id,when:atDay(1,13,30),outlet:'Cottage',techId:'t2',kind:'rims',qty:4,amount:17600,service:'Pose jantes CTC Wheels Blade 10 15" × 4',status:'Planifié',report:'',example:true});
+ const mkQ=(id,c,item,qty,unit,daysOld)=>{const lines=[{desc:'Pneu '+item,qty,unit},{desc:'Montage + équilibrage',qty,unit:0},{desc:'Valve neuve',qty,unit:75}];const ttc=qty*unit+qty*75;return{id,cid:c.id,kind:'tyres',item,qty,lines,bill:{type:c.type,name:c.name,phone:c.phone,email:c.email,address:c.address,company:c.company||null,idOk:false},status:'Envoyé',created:daysAgo(daysOld),ttc,ht:ttc/1.15,vat:ttc-ttc/1.15,sentWa:true,example:true}};
+ const quotes=[mkQ('DV-2026-0098',clients[1],'Hankook Kinergy Eco 2 185/65R15',4,3350,4),mkQ('DV-2026-0097',clients[8],'Michelin Primacy 4+ 225/45R17',2,8850,6)];
+ return{clients,techs,quotes,freed:[],appts,invoices:[],wa:[],mail:[],campaigns:[],videos:[
+  {id:uid(),title:"Montage d'une jante bronze 15\" en 30 s",stage:'Idée',plat:'TikTok'},
+  {id:uid(),title:"Comment lire la référence de son pneu",stage:'Script',plat:'Facebook Reels'},
+  {id:uid(),title:"Avant / après : Hilux en 17\"",stage:'Tournage',plat:'TikTok'}],
+  settings:{acc:'+230 5XXX XXXX',vat:15,remindAt:'17:00',fillN:3,juice:'https://juice.mcb.mu/pay/ctc-demo',bank:'MCB · Cottage Tyre Centre Ltd · n° de compte à renseigner'},seq:{q:0,f:0}}
+}
+let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}if(!S||!S.freed)S=seed();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const client=id=>S.clients.find(c=>c.id===id);
+const tech=id=>S.techs.find(t=>t.id===id);
+
+
+/* ---------------- tabs ---------------- */
+function go(v){$$('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.view===v));$$('.view').forEach(x=>x.hidden=x.id!=='v-'+v);
+ if(v==='crm')renderCRM();if(v==='camp')renderCamp();if(v==='video')renderKanban();if(v==='settings'){renderSettings();renderPhotoSettings()}if(v==='blog')renderBlogAdmin();if(v==='site')renderSite();if(v==='sophie'){renderPhones();if(!chat.msgs.length)startChat()}
+ window.scrollTo({top:0})}
+$$('.tab').forEach(t=>t.onclick=()=>go(t.dataset.view));
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g){e.preventDefault();go(g.dataset.go)}});
+
+/* ---------------- SITE ---------------- */
+let siteLang='fr';
+function renderSite(){const L=I[siteLang];$$('[data-i]').forEach(el=>{const k=el.dataset.i;if(!(k in L))return;if(k==='h1html')el.innerHTML=L[k];else el.textContent=L[k]});
+ $('#svc-grid').replaceChildren(...L.svc.map(([a,b])=>h('div',{class:'panel svc'},h('b',{},a),h('span',{class:'muted'},b))));decode();if(typeof renderGallery==='function'&&S.posts){renderGallery();renderReviewsSite();renderBlogSite()}}
+$$('#site-lang button').forEach(b=>b.onclick=()=>{siteLang=b.dataset.l;$$('#site-lang button').forEach(x=>x.setAttribute('aria-pressed',x===b));renderSite()});
+function decode(){const L=I[siteLang].dec;const v=$('#size-in').value;const m=v.match(/(\d{3})\s*\/\s*(\d{2})\s*(Z?R)\s*(\d{2})\s*(\d{2,3})?\s*([A-Z])?/i);const box=$('#decode');
+ if(!m){box.replaceChildren(h('span',{class:'muted'},'205/55 R16 91V'));return}
+ const seg=(a,b,c)=>h('div',{class:'seg'},h('span',{class:'mono'},a),h('small',{},b),c?h('small',{},c):null);
+ const li=m[5]?+m[5]:null,sp=m[6]?m[6].toUpperCase():null;
+ box.replaceChildren(seg(m[1],L.w),seg(m[2],L.a,`≈ ${Math.round(m[1]*m[2]/100)} mm`),seg(m[3].toUpperCase(),L.r),seg(m[4],L.d,`${Math.round(m[4]*25.4)} mm`),
+  li?seg(li,L.li,LI[li]?`${LI[li]} ${L.kg}`:''):null,sp?seg(sp,L.sp,SP[sp]?`${SP[sp]} ${L.kmh}`:''):null);drawTyre(v)}
+$('#size-in').addEventListener('input',decode);
+function drawTyre(label){const c=$('#tyre-canvas'),x=c.getContext('2d'),W=c.width,cx=W/2,R=W*.47;const cs=getComputedStyle(document.documentElement);
+ x.clearRect(0,0,W,W);x.fillStyle='#1b1e20';x.beginPath();x.arc(cx,cx,R,0,7);x.fill();
+ x.strokeStyle='#2a2e31';x.lineWidth=R*.12;for(let i=0;i<60;i++){const a=i/60*Math.PI*2;x.beginPath();x.arc(cx,cx,R*.94,a,a+.06);x.stroke()}
+ x.fillStyle='#232629';x.beginPath();x.arc(cx,cx,R*.86,0,7);x.fill();
+ const rim=R*.55;const g=x.createRadialGradient(cx,cx,rim*.2,cx,cx,rim);g.addColorStop(0,'#cfd3d5');g.addColorStop(1,'#8d9397');x.fillStyle=g;x.beginPath();x.arc(cx,cx,rim,0,7);x.fill();
+ x.fillStyle='#1b1e20';for(let i=0;i<5;i++){x.save();x.translate(cx,cx);x.rotate(i*Math.PI*2/5);x.beginPath();x.moveTo(-rim*.12,-rim*.25);x.lineTo(rim*.12,-rim*.25);x.lineTo(rim*.28,-rim*.9);x.lineTo(-rim*.28,-rim*.9);x.closePath();x.fill();x.restore()}
+ x.fillStyle=cs.getPropertyValue('--accent').trim()||'#F2B705';x.beginPath();x.arc(cx,cx,rim*.18,0,7);x.fill();
+ const txt=(t,rad,start,size,col)=>{x.font=`700 ${size}px "Barlow Condensed", Arial Narrow, sans-serif`;x.fillStyle=col;const chars=[...t];let tot=0;const ws=chars.map(ch=>x.measureText(ch).width+size*.08);tot=ws.reduce((a,b)=>a+b,0);let a=start-tot/rad/2;
+  chars.forEach((ch,i)=>{const w=ws[i];x.save();x.translate(cx,cx);x.rotate(a+w/rad/2);x.textAlign='center';x.fillText(ch,0,-rad);x.restore();a+=w/rad})};
+ txt(String(label||'').toUpperCase().slice(0,18),R*.7,0,R*.13,'#e8e6df');txt('COTTAGE TYRE CENTRE',R*.7,Math.PI,R*.075,'#8a8f92')}
+
+/* ---------------- AI ---------------- */
+let sample=null, aiState='pending';
+function setAi(s){aiState=s;const p=$('#ai-pill'),t=$('#ai-pill-t');p.className='pill '+(s==='on'?'ok':s==='pending'?'warn':'bad');
+ t.textContent=s==='on'?'Sophie IA active':s==='pending'?"Connexion à l'IA…":'Mode guidé (IA indisponible)';
+ $('#mode-line').textContent=(s==='on'?'IA · ':'Mode guidé · ')+'FR · EN · Kreol'}
+(async()=>{try{sample=window.claude?await window.claude.use('sample'):null}catch(e){sample=null}setAi(sample?'on':'off')})();
+function aiFail(e){if(['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(e?.code)){sample=null;setAi('off')}}
+
+/* ---------------- SOPHIE: extra lines ---------------- */
+Object.assign(T.fr,{askNeed:"Vous cherchez des pneus ou des jantes ?",needT:'Pneus',needR:'Jantes',askRim:"Quel diamètre de jante voulez-vous ? (14\" à 20\")",badRim:"Donnez-moi un diamètre entre 13 et 22 pouces, par ex. 15.",askPcd:"Et l'entraxe (PCD) de votre voiture ? Par ex. 4x100 ou 5x114.3. Si vous ne savez pas, choisissez « Je ne sais pas » : le technicien vérifiera.",dunno:'Je ne sais pas',rimOffers:s=>`Voici trois modèles CTC Wheels disponibles en ${s}. Prix TTC par jante, montage et équilibrage compris :`,qtyR:"Combien de jantes ? (un jeu = 4)",
+ kyc:"Pour établir votre devis : c'est pour un particulier ou une entreprise ?",ind:'Particulier',biz:'Entreprise',askId:"Merci d'envoyer une photo de votre pièce d'identité (recto). Elle reste confidentielle et sert uniquement à la facturation.",idBtn:'📷 Envoyer une photo',idDemo:"Image d'exemple (démo)",idOk:"Pièce d'identité bien reçue ✅ Quelle est votre adresse ?",idWait:"J'attends la photo de votre pièce d'identité : utilisez le bouton ci-dessus.",
+ askCo:"Quel est le nom de la société ?",askBrn:"Le numéro BRN ? (ex. C07012345)",badBrn:"Le BRN commence par une lettre suivie de 8 chiffres, par ex. C07012345.",askVat:"Le numéro de TVA ? (8 chiffres, ou « non » si la société n'est pas enregistrée)",badVat:"Le numéro de TVA compte 8 chiffres, par ex. 27012345. Ou écrivez « non ».",askCoAddr:"L'adresse de la société ?",known:"J'ai déjà vos informations de facturation, je prépare le devis.",
+ payQ:"Parfait ! Comment souhaitez-vous payer ?",booked:(d,o)=>`C'est réservé : ${d} à ${o}.`,tech:n=>`Votre technicien : ${n}.`,payJuice:"Scannez le QR avec Juice pour régler.",payBank:"Faites le virement en indiquant le n° de facture en référence.",payStore:"Vous réglerez au magasin le jour du RDV.",receipt:"Vous recevrez la facture acquittée dès réception du paiement.",confirmQ:"Dans quel magasin et à quel moment voulez-vous passer ?"});
+Object.assign(T.en,{askNeed:"Are you looking for tyres or rims?",needT:'Tyres',needR:'Rims',askRim:"Which rim diameter would you like? (14\" to 20\")",badRim:"Please give a diameter between 13 and 22 inches, e.g. 15.",askPcd:"And your car's bolt pattern (PCD)? E.g. 4x100 or 5x114.3. If you're not sure, choose \"I don't know\": the technician will check.",dunno:"I don't know",rimOffers:s=>`Here are three CTC Wheels models in stock in ${s}. Price per rim incl. VAT, fitting and balancing included:`,qtyR:"How many rims? (a set = 4)",
+ kyc:"To prepare your quote: is it for an individual or a company?",ind:'Individual',biz:'Company',askId:"Please send a photo of your ID card (front). It stays confidential and is only used for invoicing.",idBtn:'📷 Send a photo',idDemo:'Sample image (demo)',idOk:"ID received ✅ What's your address?",idWait:"I'm waiting for the photo of your ID: use the button above.",
+ askCo:"What's the company name?",askBrn:"The BRN? (e.g. C07012345)",badBrn:"A BRN is one letter followed by 8 digits, e.g. C07012345.",askVat:"The VAT number? (8 digits, or \"no\" if not VAT registered)",badVat:"A VAT number has 8 digits, e.g. 27012345. Or type \"no\".",askCoAddr:"The company address?",known:"I already have your billing details, preparing the quote.",
+ payQ:"Great! How would you like to pay?",booked:(d,o)=>`Booked: ${d} at ${o}.`,tech:n=>`Your technician: ${n}.`,payJuice:"Scan the QR with Juice to pay.",payBank:"Make the transfer with the invoice number as reference.",payStore:"You'll pay in store on the day.",receipt:"You'll get the paid invoice as soon as payment is received.",confirmQ:"Which store and when would you like to come?"});
+Object.assign(T.kr,{askNeed:"Ou pe rod pne ouswa zant?",needT:'Pne',needR:'Zant',askRim:"Ki diamet zant ou anvi? (14\" ziska 20\")",badRim:"Donn mwa enn diamet ant 13 ek 22 pous, par egzanp 15.",askPcd:"Ek lantraks (PCD) ou loto? Par egzanp 4x100 ouswa 5x114.3. Si ou pa kone, swazir « Mo pa kone »: teknisien-la pou verifie.",dunno:'Mo pa kone',rimOffers:s=>`Ala trwa model CTC Wheels ki ena an ${s}. Pri TTC sak zant, monte ek balansaz inkli:`,qtyR:"Komie zant? (enn zeu = 4)",
+ kyc:"Pou prepar ou devi: se pou enn partikilie ouswa enn konpani?",ind:'Partikilie',biz:'Konpani',askId:"Silvouple avoy enn foto ou kart idantite (devan). Li res konfidansiel, li servi zis pou fakirasion.",idBtn:'📷 Avoy enn foto',idDemo:'Imaz egzanp (demo)',idOk:"Mo finn gagn ou kart idantite ✅ Ki ou ladres?",idWait:"Mo pe atann foto ou kart idantite: servi bouton anler.",
+ askCo:"Ki non konpani-la?",askBrn:"Nimero BRN? (egzanp C07012345)",badBrn:"BRN komans ar enn let ek 8 sif, par egzanp C07012345.",askVat:"Nimero VAT? (8 sif, ouswa « non » si pa anrezistre)",badVat:"Nimero VAT ena 8 sif, par egzanp 27012345. Ouswa ekrir « non ».",askCoAddr:"Ladres konpani-la?",known:"Mo deza ena ou detay fakirasion, mo pe prepar devi-la.",
+ payQ:"Top! Kouma ou anvi peye?",booked:(d,o)=>`Rezerve: ${d} dan ${o}.`,tech:n=>`Ou teknisien: ${n}.`,payJuice:"Scan QR-la ar Juice pou peye.",payBank:"Fer virman-la ar nimero fakir kouma referans.",payStore:"Ou pou peye dan magazin zour RDV-la.",receipt:"Ou pou gagn fakir aste kan nou gagn peyman-la.",confirmQ:"Dan ki magazin ek kan ou anvi vini?"});
+const PAY=[{id:'juice',fr:'Juice (scan to pay)',en:'Juice (scan to pay)',kr:'Juice (scan to pay)'},{id:'bank',fr:'Virement bancaire',en:'Bank transfer',kr:'Virman labank'},{id:'card',fr:'Carte bancaire en magasin',en:'Card in store',kr:'Kart dan magazin'},{id:'cash',fr:'Espèces en magasin',en:'Cash in store',kr:'Kas dan magazin'}];
+const payName=(id,l='fr')=>PAY.find(p=>p.id===id)?.[l]||id;
+
+/* ---------------- rims catalogue (exemples) ---------------- */
+const RIMT=[{id:'cls',label:{fr:'Classique',en:'Classic',kr:'Klasik'},model:'CTC Wheels Street 5',style:{fr:'5 branches',en:'5 spokes',kr:'5 branch'},finish:{fr:'Argent diamanté',en:'Diamond-cut silver',kr:'Arzan diaman'},sw:'#C9CDD0'},
+ {id:'spt',label:{fr:'Sport',en:'Sport',kr:'Sport'},model:'CTC Wheels Blade 10',style:{fr:'10 branches fines',en:'10 thin spokes',kr:'10 branch fin'},finish:{fr:'Bronze mat',en:'Matte bronze',kr:'Bronz mat'},sw:'#A8743F'},
+ {id:'prm',label:{fr:'Premium',en:'Premium',kr:'Premium'},model:'CTC Wheels Forge-R',style:{fr:'Multi-rayons concave',en:'Concave multi-spoke',kr:'Multi-rayon konkav'},finish:{fr:'Gunmetal',en:'Gunmetal',kr:'Gunmetal'},sw:'#4A4F55'}];
+const RPRICE={13:[2900,3500,4700],14:[3200,3900,5200],15:[3600,4400,5900],16:[4500,5400,7100],17:[5500,6700,8700],18:[6900,8300,10600],19:[8200,9800,12500],20:[9600,11400,14600],21:[11000,13000,16500],22:[12500,14800,18600]};
+function parsePcd(v){const m=String(v).match(/(\d)\s*[x×*]\s*(\d{3}(?:[.,]\d)?)/i);return m?`${m[1]}x${m[2].replace(',','.')}`:null}
+function tyreItems(size){return offers(size).map(o=>({kind:'tyres',label:o.label,title:`${o.brand} ${o.model}`,sub:o.size,price:o.price,desc:`Pneu ${o.brand} ${o.model} ${o.size}`,note:o.use,
+ rows:L=>[[L==='en'?'Wet grip':L==='kr'?'Lapli':'Mouillé',h('span',{class:'label-eu',style:`background:${WETC[o.wet]}`},o.wet)],[L==='en'?'Noise':'Bruit',o.noise+' dB'],[L==='en'?'Warranty':L==='kr'?'Garanti':'Garantie',o.warranty],['Stock',`Cottage ${o.stock.cottage} · Bagatelle ${o.stock.bagatelle}`]]}))}
+function rimItems(d,pcd){const row=RPRICE[d]||RPRICE[16];const j=d<=15?'6.5J':d===16?'7J':d===17?'7.5J':'8J';
+ return RIMT.map((r,i)=>({kind:'rims',label:r.label,title:r.model,sub:`${d}" ${j} · ${pcd} · ET35`,price:row[i],swatch:r.sw,desc:`Jante ${r.model} ${d}" ${j} ${pcd} — ${r.finish.fr}`,
+  note:{fr:'Livrée avec centreurs',en:'Supplied with hub rings',kr:'Vinn avek santrer'},
+  rows:L=>[[L==='en'?'Finish':L==='kr'?'Finision':'Finition',r.finish[L]],['Design',r.style[L]],['Stock',`Cottage ${(d+i*3)%9+2} · Bagatelle ${(d+i*5)%6}`]]}))}
+
+/* ---------------- SOPHIE chat ---------------- */
+const chat={msgs:[],lang:'fr',cid:null,step:'lang',draft:{},busy:false,quoteId:null,pending:null,pickLocked:false};
+const INTAKE=['name','phone','email','car','need','size','rim','pcd'];
+const log=()=>$('#chat-log');
+function addMsg(from,text){chat.msgs.push({from,text});const el=h('div',{class:'msg '+from},text);log().append(el);scroll();return el}
+function addNode(n){log().append(n);scroll();return n}
+function scroll(){requestAnimationFrame(()=>{log().scrollTop=log().scrollHeight})}
+const tt=()=>T[chat.lang];
+const L3=(fr,en,kr)=>chat.lang==='en'?en:chat.lang==='kr'?kr:fr;
+function chipRow(items){return h('div',{class:'chips'},...items.map(([label,fn,extra])=>h('button',{class:'chip',...(extra||{}),onclick:e=>fn(e.currentTarget.parentNode,label)},label)))}
+function startChat(){log().replaceChildren();Object.assign(chat,{msgs:[],lang:'fr',cid:null,step:'lang',draft:{},quoteId:null,pending:null,pickLocked:false});
+ addMsg('sophie','Bonjour · Hello · Bonzour 👋\nFrançais, English ou Kreol ?');
+ addNode(chipRow([['Français','fr'],['English','en'],['Kreol','kr']].map(([n,l])=>[n,row=>{row.remove();addMsg('client',n);chat.lang=l;chat.step='name';addMsg('sophie',tt().hello)}])));renderPhones()}
+$('#chat-reset').onclick=startChat;
+$('#chat-form').onsubmit=e=>{e.preventDefault();const v=$('#chat-input').value.trim();if(!v||chat.busy)return;$('#chat-input').value='';onClient(v)};
+function guessLang(v){const s=v.toLowerCase();if(/\b(mo|ou|ki|pe|bizin|ena|zot|mersi|bonzour|kouma|pne|loto|zant)\b/.test(s))return'kr';if(/\b(the|my|hi|hello|need|tyre|tire|please|thanks|rims?)\b/.test(s))return'en';if(/\b(je|bonjour|mon|pneu|voiture|merci|besoin|jantes?)\b/.test(s))return'fr';return null}
+
+async function onClient(v){addMsg('client',v);
+ if(chat.step==='lang'){chat.lang=guessLang(v)||'fr';chat.step='name';$$('.chat-log .chips').forEach(c=>c.remove())}
+ if(sample&&aiState==='on'&&INTAKE.includes(chat.step))return aiTurn();
+ guided(v)}
+
+const needChips=()=>chipRow([[tt().needT,row=>{row.remove();onClient(tt().needT)}],[tt().needR,row=>{row.remove();onClient(tt().needR)}]]);
+const sizeChips=()=>chipRow(['175/65R14','185/65R15','195/65R15','205/55R16','225/45R17'].map(s=>[s,row=>{row.remove();onClient(s)}]));
+const rimChips=()=>chipRow(['14"','15"','16"','17"','18"'].map(s=>[s,row=>{row.remove();onClient(s)}]));
+const pcdChips=()=>chipRow([...['4x100','4x108','5x100','5x112','5x114.3','6x139.7'].map(s=>[s,row=>{row.remove();onClient(s)}]),[tt().dunno,row=>{row.remove();onClient(tt().dunno)}]]);
+function fmtPhone(n){const d=String(n).replace(/\D/g,'');const loc=d.startsWith('230')?d.slice(3):d;return'+230 '+loc.slice(0,4)+' '+loc.slice(4)}
+function nextIntake(d){if(!d.name)return'name';if(!d.phone)return'phone';if(d.email===undefined)return'email';if(!d.car)return'car';if(!d.need)return'need';if(d.need==='tyres'&&!d.size)return'size';if(d.need==='rims'&&!d.rim)return'rim';if(d.need==='rims'&&!d.pcd)return'pcd';return null}
+function askFor(step){const t=tt(),d=chat.draft;chat.step=step;
+ ({name:()=>addMsg('sophie',t.hello),phone:()=>addMsg('sophie',t.askPhone((d.name||'').split(' ')[0])),email:()=>addMsg('sophie',t.askEmail),car:()=>addMsg('sophie',t.askCar),
+   need:()=>{addMsg('sophie',t.askNeed);addNode(needChips())},size:()=>{addMsg('sophie',t.askSize);addNode(sizeChips())},rim:()=>{addMsg('sophie',t.askRim);addNode(rimChips())},pcd:()=>{addMsg('sophie',t.askPcd);addNode(pcdChips())}})[step]()}
+function advance(){const n=nextIntake(chat.draft);if(n)askFor(n);else finishIntake(chat.draft.need)}
+
+function guided(v){const d=chat.draft,t=tt(),c=client(chat.cid);
+ switch(chat.step){
+  case 'name':if(chat.msgs.filter(m=>m.from==='client').length<=2&&/^(bonjour|hello|hi|bonzour|salut|hey)\W*$/i.test(v)){addMsg('sophie',t.hello);return}
+   d.name=v.replace(/^(je m'appelle|moi c'est|my name is|i'm|i am|mo apel|mo non)\s+/i,'').replace(/^\w/,x=>x.toUpperCase());return advance();
+  case 'phone':{const n=v.replace(/[^\d+]/g,'');if(n.replace('+','').length<7)return askFor('phone');d.phone=fmtPhone(n);return advance()}
+  case 'email':d.email=/@/.test(v)?v.trim():'';return advance();
+  case 'car':d.car=v;return advance();
+  case 'need':d.need=/jant|rim|zant|wheel/i.test(v)?'rims':'tyres';return advance();
+  case 'size':{const p=parseSize(v);if(!p){addMsg('sophie',t.badSize);return}d.size=p.str;return advance()}
+  case 'rim':{const n=parseInt(v.replace(/[^\d]/g,''),10);if(!(n>=13&&n<=22)){addMsg('sophie',t.badRim);return}d.rim=n;return advance()}
+  case 'pcd':{const p=parsePcd(v);if(!p&&!/sai|know|kone|\?/i.test(v)){addMsg('sophie',t.askPcd);addNode(pcdChips());return}d.pcd=p||'PCD à vérifier';return advance()}
+  case 'kyc':return setKyc(/entre|comp|biz|busi|konpani|soci|ltd/i.test(v)?'biz':'ind');
+  case 'id':addMsg('sophie',t.idWait);return;
+  case 'addr':c.address=v;c.type='ind';save();return makeQuote();
+  case 'co':c.company={name:v};chat.step='brn';addMsg('sophie',t.askBrn);return;
+  case 'brn':{const b=v.replace(/\s/g,'').toUpperCase();if(!/^[A-Z]\d{8}$/.test(b)){addMsg('sophie',t.badBrn);return}c.company.brn=b;chat.step='vat';addMsg('sophie',t.askVat);return}
+  case 'vat':{if(/^(non|no|none|pa ena)\b/i.test(v))c.company.vat='Non enregistrée';else{const x=v.replace(/\D/g,'');if(x.length!==8){addMsg('sophie',t.badVat);return}c.company.vat=x}chat.step='coaddr';addMsg('sophie',t.askCoAddr);return}
+  case 'coaddr':c.address=v;c.type='biz';save();return makeQuote();
+  case 'email-late':if(/@/.test(v)){c.email=v.trim();save();chat.step='quote';return sendQuoteMail(S.quotes.find(q=>q.id===chat.quoteId))}addMsg('sophie',L3("Il me faut une adresse email valide.","I need a valid email address.","Mo bizin enn adres email valid."));return;
+  case 'quote':{const q=S.quotes.find(x=>x.id===chat.quoteId);if(q&&/^(oui|yes|wi|ok|dakor)\b/i.test(v))return confirmQuote(q)}
+  default:{const a=chat.cid&&S.appts.find(x=>x.cid===chat.cid&&x.status==='Planifié');
+   if(a&&/(annul|cancel|anile|^\s*2\s*$)/i.test(v)){clientCancels(a.id);addMsg('sophie',rt(a.cid).cancel);return}
+   if(a&&a.remind&&a.remind!=='Confirmé'&&/(confirm|^\s*1\s*$|^\s*(oui|yes|wi)\b)/i.test(v)){clientConfirms(a.id);addMsg('sophie',rt(a.cid).ok(hhmm(a.when),a.outlet));return}}
+   addMsg('sophie',L3("C'est noté ! Utilisez les boutons ci-dessus pour continuer.","Noted! Use the buttons above to continue.","Mo finn not sa! Servi bouton anler pou kontinie."))}}
+
+function upsertClient(d){let c=S.clients.find(x=>x.phone.replace(/\D/g,'')===String(d.phone||'').replace(/\D/g,''));
+ if(!c){c={id:'c'+uid(),created:now().toISOString(),source:'Sophie',outlet:'Cottage',lastPurchase:null,type:null,address:'',idDoc:null};S.clients.unshift(c)}
+ Object.assign(c,{name:d.name||c.name,phone:d.phone||c.phone,email:d.email||c.email||'',car:d.car||c.car,size:d.size||c.size,lang:chat.lang});if(d.pcd)c.pcd=d.pcd;save();return c}
+function finishIntake(kind){const c=upsertClient(chat.draft);chat.cid=c.id;chat.step='offers';renderPhones();showOffers(kind||'tyres')}
+
+async function aiTurn(){chat.busy=true;$('#chat-send').disabled=true;const typing=addMsg('sophie','…');
+ const d=chat.draft;const known=`Déjà connu : nom=${d.name||'?'}, téléphone=${d.phone||'?'}, email=${d.email===undefined?'?':(d.email||'refusé')}, voiture=${d.car||'?'}, besoin=${d.need||'?'}, taille pneu=${d.size||'?'}, diamètre jante=${d.rim||'?'}, PCD=${d.pcd||'?'}. Langue probable du client : ${chat.lang}.`;
+ const RULES=`Tu es Sophie, l'assistante virtuelle de Cottage Tyre Centre (CTC), vendeur de pneus et de jantes à l'île Maurice. Deux magasins : Forbach Road/Royal Road, Cottage (WhatsApp 5775 7242, tél 260 7600) et Bagatelle Mall (WhatsApp 5251 7242). Services : pneus toutes marques neufs et rechapés, jantes alliage CTC Wheels (7 coloris, collection bronze 15"), montage, équilibrage, réparation, chambres à air, valves. Distributeur Michelin. Promo en cours sur les jantes 15" et 17".
+Réponds dans la langue du client : français, anglais ou créole mauricien (kreol morisien : "mo", "ou", "bizin", "pne", "zant", "loto"). Ton chaleureux et bref comme sur WhatsApp : 1 à 3 phrases, une seule question à la fois.
+Collecte dans cet ordre : 1) nom 2) numéro WhatsApp 3) email (facultatif ; si le client refuse mets "email": "") 4) marque, modèle et année de la voiture 5) besoin : pneus ou jantes 6a) pour des pneus : la référence (ex 195/65R15, écrite sur le flanc) ; s'il ne la connaît pas, explique où la lire ou propose la taille d'origine courante pour son modèle et demande confirmation 6b) pour des jantes : le diamètre voulu (13 à 22 pouces) puis l'entraxe PCD (ex 4x100, 5x114.3) ; propose le PCD habituel de son modèle et demande confirmation, ou mets "pcd": "à vérifier" s'il ne sait pas.
+Ne demande PAS de pièce d'identité, d'adresse, de BRN, de TVA ni de moyen de paiement : la page s'en charge ensuite. Ne donne jamais de prix ni d'horaires précis.
+Dès que tout est rassemblé et confirmé, mets "show": "tyres" ou "rims" et dis que tu lui montres trois modèles disponibles. Question hors sujet : réponds brièvement puis reviens à l'objectif.
+Réponds UNIQUEMENT avec un objet JSON : {"reply": string, "lang": "fr"|"en"|"kr", "client": {"name"?: string, "phone"?: string, "email"?: string, "car"?: string, "need"?: "tyres"|"rims", "tyre_size"?: string, "rim_diameter"?: number, "pcd"?: string}, "show": null | "tyres" | "rims"}. Mets dans "client" seulement ce que le client a donné ou confirmé. tyre_size au format 195/65R15.
+${known}`;
+ const turns=[{role:'user',content:RULES}];
+ chat.msgs.slice(-16).forEach(m=>{if(m.from==='client')turns.push({role:'user',content:m.text});else if(m.from==='sophie'&&m.text!=='…')turns.push({role:'assistant',content:m.text})});
+ if(turns[turns.length-1].role!=='user')turns.push({role:'user',content:'(continue)'});
+ try{const r=await sample.json(turns,{modelTier:'quick',cache:false});
+  typing.remove();chat.msgs=chat.msgs.filter(m=>m.text!=='…');
+  if(r?.lang&&T[r.lang])chat.lang=r.lang;
+  const c=r?.client||{};if(c.name)d.name=String(c.name);if(c.phone)d.phone=fmtPhone(c.phone);if(c.email!==undefined&&c.email!==null)d.email=/@/.test(c.email)?String(c.email):'';if(c.car)d.car=String(c.car);
+  if(c.need==='tyres'||c.need==='rims')d.need=c.need;if(c.tyre_size&&parseSize(c.tyre_size))d.size=parseSize(c.tyre_size).str;
+  const rd=parseInt(c.rim_diameter,10);if(rd>=13&&rd<=22)d.rim=rd;if(c.pcd)d.pcd=parsePcd(c.pcd)||'PCD à vérifier';
+  addMsg('sophie',String(r?.reply||'…'));
+  const n=nextIntake(d);chat.step=n||(d.need==='rims'?'pcd':'size');
+  if(!n&&(r?.show==='tyres'||r?.show==='rims'))finishIntake(d.need);
+ }catch(e){typing.remove();chat.msgs=chat.msgs.filter(m=>m.text!=='…');aiFail(e);
+  addMsg('sys',L3('Sophie passe en mode guidé.','Sophie switches to guided mode.','Sophie pas an mod gide.'));sample=null;setAi('off');advance()}
+ finally{chat.busy=false;$('#chat-send').disabled=false}}
+
+/* offers -> qty -> billing details -> quote */
+function showOffers(kind){const t=tt(),L=chat.lang,d=chat.draft,c=client(chat.cid);
+ const items=kind==='rims'?rimItems(d.rim||15,d.pcd||'PCD à vérifier'):tyreItems(d.size||c.size);
+ addMsg('sophie',kind==='rims'?t.rimOffers(`${d.rim}" · ${d.pcd}`):t.offers(d.size||c.size));
+ addNode(h('div',{class:'tyres'},...items.map(o=>h('div',{class:'tyre'},
+  h('span',{class:'tier'},o.label[L]),
+  o.swatch?h('span',{class:'swatch',style:`background:${o.swatch}`,'aria-hidden':'true'}):null,
+  h('b',{},o.title),h('span',{class:'mono muted',style:'font-size:12px'},o.sub),h('span',{class:'price'},rs(o.price)),
+  h('dl',{},...o.rows(L).flatMap(([a,b])=>[h('dt',{},a),h('dd',{},b)])),
+  h('span',{class:'muted',style:'font-size:12px'},o.note[L]),
+  h('button',{class:'btn primary sm',onclick:e=>pick(o,e.target.closest('.tyre'))},L3('Choisir','Choose','Swazir'))))))}
+function pick(o,card){if(chat.pickLocked)return;$$('.tyre').forEach(x=>x.classList.remove('chosen'));card.classList.add('chosen');
+ addMsg('client',`${o.title} · ${o.sub}`);addMsg('sophie',o.kind==='rims'?tt().qtyR:tt().qty);
+ addNode(chipRow([1,2,4].map(n=>[String(n),row=>{row.remove();chat.pickLocked=true;addMsg('client',String(n));chat.pending={item:o,qty:n};startKyc()}])))}
+function kycComplete(c){return c.type==='ind'?!!(c.idDoc&&c.address):c.type==='biz'?!!(c.company?.brn&&c.company?.vat&&c.address):false}
+function startKyc(){const c=client(chat.cid),t=tt();if(kycComplete(c)){addMsg('sophie',t.known);return makeQuote()}
+ chat.step='kyc';addMsg('sophie',t.kyc);addNode(chipRow([[t.ind,row=>{row.remove();addMsg('client',t.ind);setKyc('ind')}],[t.biz,row=>{row.remove();addMsg('client',t.biz);setKyc('biz')}]]))}
+function setKyc(type){const t=tt();if(type==='biz'){chat.step='co';addMsg('sophie',t.askCo);return}chat.step='id';addMsg('sophie',t.askId);addNode(idUploader())}
+function idUploader(){const t=tt();const inp=h('input',{type:'file',accept:'image/*',id:'id-file-'+uid(),hidden:true});
+ const box=h('div',{class:'chips'},inp,h('button',{class:'chip',style:'background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600',onclick:()=>inp.click()},t.idBtn),h('button',{class:'chip',onclick:()=>onId(box,demoId(),'exemple-demo.jpg')},t.idDemo));
+ inp.onchange=async()=>{const f=inp.files?.[0];if(!f)return;try{onId(box,await thumb(f),f.name)}catch(e){toast("Image illisible, essayez une autre photo")}};return box}
+function thumb(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onerror=rej;fr.onload=()=>{const im=new Image();im.onerror=rej;im.onload=()=>{const k=Math.min(1,260/Math.max(im.width,im.height));const cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);res(cv.toDataURL('image/jpeg',.7))};im.src=fr.result};fr.readAsDataURL(file)})}
+function demoId(){const cv=document.createElement('canvas');cv.width=260;cv.height=164;const x=cv.getContext('2d');x.fillStyle='#dfe6ea';x.fillRect(0,0,260,164);x.fillStyle='#9aa7ae';x.fillRect(14,40,64,80);x.fillStyle='#39434a';x.font='bold 13px sans-serif';x.fillText("PIÈCE D'IDENTITÉ",90,34);x.font='11px sans-serif';
+ const c=client(chat.cid);x.fillText((c?.name||'Client').toUpperCase(),90,62);x.fillText('N° EXEMPLE-000000',90,82);x.fillText('DOCUMENT DE DÉMONSTRATION',90,102);x.fillStyle='#c0392b';x.font='bold 22px sans-serif';x.save();x.translate(130,140);x.rotate(-.12);x.fillText('SPÉCIMEN',-60,0);x.restore();return cv.toDataURL('image/jpeg',.7)}
+function onId(box,data,name){box.remove();const c=client(chat.cid);c.idDoc={name,thumb:data,at:now().toISOString()};save();
+ chat.msgs.push({from:'client',text:"[photo de la pièce d'identité]"});addNode(h('div',{class:'msg client'},h('img',{src:data,alt:"Pièce d'identité envoyée",style:'width:160px;border-radius:6px;display:block'})));
+ chat.step='addr';addMsg('sophie',tt().idOk)}
+function billOf(c){return{type:c.type,name:c.name,phone:c.phone,email:c.email,car:c.car,address:c.address,company:c.company?{...c.company}:null,idOk:!!c.idDoc}}
+function nextNo(k,p){S.seq[k]=(S.seq[k]||0)+1;return`${p}-2026-${String(S.seq[k]).padStart(4,'0')}`}
+function totals(lines){const ttc=lines.reduce((a,l)=>a+l.qty*l.unit,0);const ht=ttc/(1+S.settings.vat/100);return{ttc,ht,vat:ttc-ht}}
+function makeQuote(){const{item,qty}=chat.pending;const c=client(chat.cid);
+ const lines=item.kind==='rims'?[{desc:item.desc,qty,unit:item.price},{desc:'Montage + équilibrage',qty,unit:0},{desc:'Écrous / boulons',qty:qty*4,unit:40}]:[{desc:item.desc,qty,unit:item.price},{desc:'Montage + équilibrage',qty,unit:0},{desc:'Valve neuve',qty,unit:75}];
+ const q={id:nextNo('q','DV'),cid:c.id,kind:item.kind,item:`${item.title} ${item.sub}`,qty,lines,bill:billOf(c),status:'Envoyé',created:now().toISOString(),...totals(lines)};S.quotes.unshift(q);chat.quoteId=q.id;chat.step='quote';save();
+ addMsg('sophie',tt().quote);addNode(docCard(q,'quote'));
+ const act=chipRow([['WhatsApp',()=>{sendQuoteWa(q);addMsg('sophie',tt().sentWa)}],['Email',()=>sendQuoteMail(q)],
+  [L3('Confirmer le devis','Confirm quote','Konfirm devi'),row=>{row.remove();confirmQuote(q)},{style:'background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600'}]]);chat.quoteActs=act;addNode(act)}
+function billBlock(b){if(!b)return null;return h('div',{class:'bill'},
+ b.type==='biz'?[h('b',{},b.company?.name||'—'),h('span',{class:'mono'},`BRN ${b.company?.brn||'—'} · TVA ${b.company?.vat||'—'}`),h('span',{},b.address||'—'),h('span',{class:'muted'},`Contact : ${b.name} · ${b.phone}`)]
+ :[h('b',{},b.name),h('span',{},b.address||'—'),h('span',{class:'muted'},`${b.phone}${b.email?' · '+b.email:''}`),h('span',{class:'muted'},b.idOk?"Pièce d'identité : reçue ✓":"Pièce d'identité : manquante")])}
+function docCard(d,kind){return h('div',{class:'doc'},
+  h('div',{class:'row',style:'justify-content:space-between'},h('b',{style:'font:700 20px var(--f-display);text-transform:uppercase'},kind==='quote'?'Devis':'Facture'),h('span',{class:'mono'},d.id)),
+  h('div',{class:'row',style:'justify-content:space-between;align-items:flex-start;gap:16px'},h('div',{class:'bill muted'},h('b',{style:'color:var(--ink)'},'Cottage Tyre Centre Ltd'),h('span',{},'Royal Road, Cottage'),h('span',{class:'mono'},'BRN / TVA : à renseigner')),billBlock(d.bill)),
+  h('div',{class:'tbl-wrap'},h('table',{},h('thead',{},h('tr',{},h('th',{},'Désignation'),h('th',{class:'n'},'Qté'),h('th',{class:'n'},'PU TTC'),h('th',{class:'n'},'Total'))),
+   h('tbody',{},...d.lines.map(l=>h('tr',{},h('td',{},l.desc),h('td',{class:'n'},l.qty),h('td',{class:'n'},l.unit?rs(l.unit):'inclus'),h('td',{class:'n'},l.unit?rs(l.qty*l.unit):'—')))))),
+  h('div',{class:'row',style:'justify-content:space-between'},h('span',{class:'muted mono',style:'font-size:12px'},`HT ${rs(d.ht)} · TVA ${S.settings.vat}% ${rs(d.vat)}`),h('span',{class:'tot'},rs(d.ttc))))}
+function waTo(to,cid,text,extra={}){S.wa.push({id:uid(),to,cid,text,ts:now().toISOString(),...extra});save();renderPhones()}
+function sendQuoteWa(q){q.sentWa=true;waTo('client',q.cid,`📄 Devis ${q.id} — CTC\n${q.item} × ${q.qty}\nTotal TTC : ${rs(q.ttc)} (montage + équilibrage inclus)\nRépondez OUI pour confirmer.`)}
+function sendQuoteMail(q){const c=client(q.cid);if(!c.email){addMsg('sophie',L3("Je n'ai pas votre email, quelle est-elle ?","I don't have your email, what is it?","Mo pa ena ou email, ki li ete?"));chat.step='email-late';return}
+ S.mail.push({id:uid(),to:c.email,subject:`Votre devis ${q.id} — Cottage Tyre Centre`,body:`${q.item} × ${q.qty} — ${rs(q.ttc)} TTC`,ts:now().toISOString()});q.sentMail=true;save();renderPhones();addMsg('sophie',tt().sentMail)}
+
+/* confirm -> payment method -> store + slot -> technician -> invoice */
+function slots(){const out=[];let d=new Date();d.setHours(0,0,0,0);while(out.length<3){d=new Date(d.getTime()+864e5);if(d.getDay()!==0)out.push(new Date(d))}
+ return out.flatMap(day=>['08:30','10:30','13:30','15:30'].map(t=>{const[hh,mm]=t.split(':');const x=new Date(day);x.setHours(+hh,+mm);return x}))}
+const freeTechs=(outlet,iso)=>S.techs.filter(t=>t.outlet===outlet&&!S.appts.some(a=>a.techId===t.id&&a.when===iso&&a.status!=='Annulé'));
+const load=t=>S.appts.filter(a=>a.techId===t.id&&a.status==='Planifié').length;
+function assignTech(outlet,iso){return freeTechs(outlet,iso).sort((a,b)=>load(a)-load(b))[0]}
+function confirmQuote(q){if(q.status==='Confirmé')return;q.status='Confirmé';save();chat.quoteActs?.remove();chat.step='pay';
+ addMsg('client',L3('Je confirme le devis','I confirm the quote','Mo konfirm devi-la'));addMsg('sophie',tt().payQ);
+ addNode(chipRow(PAY.map(p=>[p[chat.lang],row=>{row.remove();addMsg('client',p[chat.lang]);q.method=p.id;save();askSlot(q)}])))}
+function askSlot(q){chat.step='slot';addMsg('sophie',tt().confirmQ);let outlet=client(q.cid).outlet||'Cottage';
+ const sc=h('div',{class:'chips'});
+ const renderSlots=()=>{[...oc.querySelectorAll('button')].forEach(b=>b.setAttribute('aria-pressed',b.dataset.o===outlet));
+  sc.replaceChildren(...slots().filter(s=>freeTechs(outlet,s.toISOString()).length).map(s=>h('button',{class:'chip',onclick:()=>{oc.remove();sc.remove();book(q,s,outlet)}},`${dstr(s)} ${hhmm(s)}`)))};
+ const oc=h('div',{class:'chips'},h('span',{class:'muted',style:'font-size:13px;align-self:center'},tt().outlet+' :'),...['Cottage','Bagatelle'].map(o=>h('button',{class:'chip seg-chip','data-o':o,onclick:()=>{outlet=o;renderSlots()}},o)));
+ addNode(oc);addNode(sc);renderSlots()}
+function payInstr(m){const t=tt();return m==='juice'?t.payJuice:m==='bank'?t.payBank:t.payStore}
+function book(q,when,outlet){const c=client(q.cid),t=tt(),iso=when.toISOString();addMsg('client',`${dstr(when)} ${hhmm(when)} · ${outlet}`);
+ const tk=assignTech(outlet,iso);
+ const a={id:uid(),cid:c.id,qid:q.id,when:iso,outlet,techId:tk.id,kind:q.kind,qty:q.qty,amount:q.ttc,service:`${q.kind==='rims'?'Pose jantes':'Pose pneus'} ${q.item} × ${q.qty}`,status:'Planifié',report:''};S.appts.push(a);c.outlet=outlet;
+ const inv={id:nextNo('f','F'),cid:c.id,qid:q.id,aid:a.id,lines:q.lines,bill:q.bill,ttc:q.ttc,ht:q.ht,vat:q.vat,method:q.method,outlet,status:'En attente',created:now().toISOString(),ref:null};S.invoices.unshift(inv);save();
+ addMsg('sophie',`${t.booked(`${dstr(when)} ${hhmm(when)}`,outlet)} ${t.tech(tk.name)}\n${payInstr(q.method)} ${t.receipt}\n${L3('Je vous enverrai un rappel la veille pour confirmer.',"I'll send you a reminder the day before to confirm.",'Mo pou avoy ou enn rapel lavey pou konfirme.')}`);addNode(invoiceCard(inv));
+ const payLine=q.method==='juice'?`Payer avec Juice : ${S.settings.juice}?ref=${inv.id}`:q.method==='bank'?`Virement : ${S.settings.bank}\nRéférence : ${inv.id}`:`Paiement au magasin (${payName(q.method)})`;
+ waTo('client',c.id,`✅ RDV confirmé : ${dstr(when)} à ${hhmm(when)}, CTC ${outlet}\n🔧 Technicien : ${tk.name}\n🧾 Facture ${inv.id} : ${rs(inv.ttc)}\n${payLine}`);
+ waTo('acc',c.id,`💰 Paiement en attente\nFacture ${inv.id} — ${c.type==='biz'?c.company.name+' ('+c.name+')':c.name}\nMontant : ${rs(inv.ttc)} · ${payName(q.method)}\nRDV ${dstr(when)} ${hhmm(when)} · ${outlet}\nEntrez la référence de transaction ou le n° de reçu pour valider.`,{inv:inv.id});
+ waTo('tech',c.id,`🔧 ${tk.name}, nouvelle intervention\n${dstr(when)} ${hhmm(when)} · ${outlet}\n${a.service}\nClient : ${c.name} · ${c.phone}\nVoiture : ${c.car}${q.kind==='rims'?'\nPCD : '+(c.pcd||'à vérifier'):''}`);
+ if(c.email)S.mail.push({id:uid(),to:c.email,subject:`Facture ${inv.id} à régler — Cottage Tyre Centre`,body:`${rs(inv.ttc)} · ${payName(q.method)}`,ts:now().toISOString()});save();renderPhones();chat.step='done'}
+function invoiceCard(inv){const d=docCard(inv,'invoice');const status=h('span',{class:'st '+(inv.status==='Payée'?'ok':'warn'),'data-inv':inv.id},inv.status==='Payée'?`Payée · réf ${inv.ref}`:'En attente de paiement');
+ if(inv.method==='juice'||!inv.method){const cv=h('canvas',{width:200,height:200,'aria-label':'QR de démonstration'});drawQR(cv,inv.id+inv.ttc);
+  d.append(h('div',{class:'qr'},cv,h('div',{style:'display:grid;gap:6px;min-width:0'},h('b',{},'Scan to pay · Juice / MauCAS'),h('span',{class:'mono',style:'font-size:12px;overflow-wrap:anywhere'},`${S.settings.juice}?ref=${inv.id}`),h('span',{class:'muted',style:'font-size:12px'},'QR de démonstration, non payable'),status)))}
+ else if(inv.method==='bank')d.append(h('div',{class:'bill'},h('b',{},'Virement bancaire'),h('span',{class:'mono'},S.settings.bank),h('span',{},`Référence à indiquer : ${inv.id}`),status));
+ else d.append(h('div',{class:'bill'},h('b',{},payName(inv.method)),h('span',{},`À régler au magasin CTC ${inv.outlet||''} le jour du rendez-vous.`),status));
+ return d}
+function drawQR(cv,seedStr){const x=cv.getContext('2d'),N=25,s=cv.width/N;let hs=0;for(const ch of seedStr)hs=(hs*31+ch.charCodeAt(0))>>>0;const rnd=()=>{hs^=hs<<13;hs^=hs>>>17;hs^=hs<<5;return(hs>>>0)/4294967296};
+ x.fillStyle='#fff';x.fillRect(0,0,cv.width,cv.width);x.fillStyle='#111';for(let i=0;i<N;i++)for(let j=0;j<N;j++){const f=(i<8&&j<8)||(i<8&&j>=N-8)||(i>=N-8&&j<8);if(!f&&rnd()>.52)x.fillRect(i*s,j*s,s,s)}
+ [[0,0],[N-7,0],[0,N-7]].forEach(([a,b])=>{x.fillRect(a*s,b*s,7*s,7*s);x.fillStyle='#fff';x.fillRect((a+1)*s,(b+1)*s,5*s,5*s);x.fillStyle='#111';x.fillRect((a+2)*s,(b+2)*s,3*s,3*s)})}
+
+/* accountant validation */
+function validatePayment(invId,ref){const inv=S.invoices.find(i=>i.id===invId);if(!inv||inv.status!=='En attente')return;ref=String(ref||'').trim();if(ref.length<4){toast('Entrez la référence de transaction ou le n° de reçu');return}
+ inv.status='Payée';inv.ref=ref;inv.paidAt=now().toISOString();const c=client(inv.cid);c.lastPurchase=inv.paidAt;
+ waTo('acc',c.id,`✔ Paiement validé — ${inv.id} (${payName(inv.method)}), réf ${ref}. Facture envoyée au client.`);
+ waTo('client',c.id,`🧾 Facture acquittée ${inv.id}\nMontant payé : ${rs(inv.ttc)} · réf ${ref}\nMerci et à bientôt chez CTC 🛞`);
+ if(c.email)S.mail.push({id:uid(),to:c.email,subject:`Facture acquittée ${inv.id} — Cottage Tyre Centre`,body:`PDF joint · réf ${ref}`,ts:now().toISOString()});save();renderPhones();
+ $$(`[data-inv="${inv.id}"]`).forEach(e=>{e.className='st ok';e.textContent=`Payée · réf ${ref}`});
+ if(chat.cid===c.id){addMsg('sophie',tt().paid);const d=invoiceCard(inv);d.prepend(h('span',{class:'stamp'},'PAYÉE'));addNode(d)}
+ toast(`Paiement ${inv.id} validé`);if(!$('#v-crm').hidden)renderCRM()}
+
+function renderPhones(){const c=client(chat.cid);$('#wa-client-name').textContent=c?`${c.name} · ${c.phone}`:'';$('#wa-acc-num').textContent=S.settings.acc;
+ const bubble=m=>waBubble(m);
+ const fill=(sel,list,empty)=>$(sel).replaceChildren(...(list.length?list:[h('div',{class:'empty'},empty)]));
+ fill('#wa-client',S.wa.filter(m=>m.to==='client'&&m.cid===chat.cid).map(bubble),'Les messages envoyés au client apparaissent ici.');
+ fill('#wa-acc',S.wa.filter(m=>m.to==='acc').slice(-8).map(bubble),'Sophie prévient le comptable quand un paiement est en attente.');
+ fill('#wa-tech',S.wa.filter(m=>m.to==='tech').slice(-6).map(bubble),'Le technicien attribué reçoit sa fiche d\'intervention ici.');
+ fill('#mail-log',S.mail.slice(-6).map(m=>h('div',{class:'wa',style:'background:var(--surface);align-self:stretch'},h('b',{},m.subject),'\n',m.to,' — ',m.body,h('time',{},hhmm(m.ts)))),'Aucun email envoyé.');
+ ['#wa-client','#wa-acc','#wa-tech','#mail-log'].forEach(s=>{const e=$(s);e.scrollTop=e.scrollHeight})}
+
+/* ---------------- RELANCES J-1 & REMPLACEMENT ---------------- */
+const RT={
+ fr:{remind:(d,t,o,s)=>`🔔 Rappel CTC : votre RDV est demain ${d} à ${t}, magasin ${o} (${s}).\nRépondez 1 pour confirmer ou 2 pour annuler.`,again:(t,o)=>`Petit rappel : merci de confirmer votre RDV de demain à ${t} à ${o}.\n1 = je confirme · 2 = j'annule`,ok:(t,o)=>`Merci ! On vous attend demain à ${t} à CTC ${o} 🛞`,cancel:"C'est noté, votre RDV est annulé. Écrivez-moi quand vous voulez un nouveau créneau 🙂",
+  offer:(n,d,t,o,why)=>`🛞 Bonne nouvelle ${n} ! Un créneau s'est libéré ${d} à ${t} à CTC ${o}.${why?'\n'+why:''}\nRépondez OUI pour le réserver (premier arrivé, premier servi).`,whyQ:(q,i)=>`Idéal pour votre devis ${q} (${i}).`,whyOld:s=>`Vos pneus ${s} ont plus de 18 mois : bon moment pour un contrôle.`,
+  taken:n=>`Merci ${n} ! Ce créneau vient d'être attribué. Je vous garde en priorité pour le prochain.`,got:(d,t,o,k)=>`C'est réservé : ${d} à ${t}, CTC ${o}. Technicien : ${k}. À bientôt !`},
+ en:{remind:(d,t,o,s)=>`🔔 CTC reminder: your appointment is tomorrow ${d} at ${t}, ${o} store (${s}).\nReply 1 to confirm or 2 to cancel.`,again:(t,o)=>`Quick reminder: please confirm your appointment tomorrow at ${t} in ${o}.\n1 = confirm · 2 = cancel`,ok:(t,o)=>`Thank you! See you tomorrow at ${t} at CTC ${o} 🛞`,cancel:"Noted, your appointment is cancelled. Message me whenever you'd like a new slot 🙂",
+  offer:(n,d,t,o,why)=>`🛞 Good news ${n}! A slot just opened ${d} at ${t} at CTC ${o}.${why?'\n'+why:''}\nReply YES to book it (first come, first served).`,whyQ:(q,i)=>`Perfect for your quote ${q} (${i}).`,whyOld:s=>`Your ${s} tyres are over 18 months old: a good time for a check.`,
+  taken:n=>`Thanks ${n}! That slot has just been taken. I'll keep you first in line for the next one.`,got:(d,t,o,k)=>`Booked: ${d} at ${t}, CTC ${o}. Technician: ${k}. See you soon!`},
+ kr:{remind:(d,t,o,s)=>`🔔 Rapel CTC: ou RDV se dime ${d} a ${t}, magazin ${o} (${s}).\nReponn 1 pou konfirme ouswa 2 pou anile.`,again:(t,o)=>`Pti rapel: silvouple konfirm ou RDV dime a ${t} dan ${o}.\n1 = mo konfirme · 2 = mo anile`,ok:(t,o)=>`Mersi! Nou atann ou dime a ${t} kot CTC ${o} 🛞`,cancel:"Mo finn not sa, ou RDV anile. Ekrir mwa kan ou anvi enn nouvo ler 🙂",
+  offer:(n,d,t,o,why)=>`🛞 Bon nouvel ${n}! Enn ler finn libere ${d} a ${t} kot CTC ${o}.${why?'\n'+why:''}\nReponn WI pou rezerv li (premie ki reponn gagn li).`,whyQ:(q,i)=>`Parfe pou ou devi ${q} (${i}).`,whyOld:s=>`Ou pne ${s} ena plis ki 18 mwa: bon moman pou enn kontrol.`,
+  taken:n=>`Mersi ${n}! Ler-la fek pran. Mo gard ou an priorite pou prosenn-la.`,got:(d,t,o,k)=>`Rezerve: ${d} a ${t}, CTC ${o}. Teknisien: ${k}. Anou zwenn!`}};
+const rt=cid=>RT[client(cid)?.lang]||RT.fr;
+const first=c=>(c?.name||'').split(' ')[0];
+const isTomorrow=iso=>{const d=new Date(iso),t=new Date(Date.now()+864e5);return d.toDateString()===t.toDateString()};
+function sendReminder(a,second){const c=client(a.cid),R=rt(a.cid);a.remind=second?'Sans réponse':'Relancé';a.remindAt=now().toISOString();if(second)a.callNeeded=true;
+ waTo('client',a.cid,second?R.again(hhmm(a.when),a.outlet):R.remind(dstr(a.when),hhmm(a.when),a.outlet,a.service),{kind:'remind',aid:a.id});save()}
+function runReminders(){const list=S.appts.filter(a=>a.status==='Planifié'&&isTomorrow(a.when)&&!a.remind);list.forEach(a=>sendReminder(a));
+ toast(list.length?`${list.length} relance(s) J-1 envoyée(s) sur WhatsApp`:'Aucun RDV de demain à relancer');refresh()}
+function clientConfirms(aid){const a=S.appts.find(x=>x.id===aid);if(!a||a.status!=='Planifié')return;a.remind='Confirmé';a.callNeeded=false;save();
+ waTo('client',a.cid,rt(a.cid).ok(hhmm(a.when),a.outlet));waTo('tech',a.cid,`✅ ${tech(a.techId)?.name} : ${client(a.cid).name} confirme le RDV de ${dstr(a.when)} ${hhmm(a.when)} · ${a.outlet}`);toast('RDV confirmé par le client');refresh()}
+function clientCancels(aid){const a=S.appts.find(x=>x.id===aid);if(!a||a.status!=='Planifié')return;const c=client(a.cid);
+ a.status='Annulé';a.remind='Annulé';a.cancelledAt=now().toISOString();
+ const inv=S.invoices.find(i=>i.aid===a.id);
+ if(inv){if(inv.status==='Payée'){inv.status='Remboursement à faire';waTo('acc',a.cid,`↩️ RDV annulé — ${c.name}\nFacture ${inv.id} déjà payée (${rs(inv.ttc)}, réf ${inv.ref}) : remboursement ou avoir à prévoir.`)}
+  else{inv.status='Annulée';waTo('acc',a.cid,`ℹ️ RDV annulé — ${c.name}\nFacture ${inv.id} (${rs(inv.ttc)}) annulée, plus aucun paiement attendu.`)}}
+ waTo('client',a.cid,rt(a.cid).cancel);waTo('tech',a.cid,`❌ ${tech(a.techId)?.name} : RDV annulé ${dstr(a.when)} ${hhmm(a.when)} · ${a.outlet} (${c.name}). Sophie cherche un remplaçant.`);save();
+ openFreedSlot(a);refresh()}
+function candidates(slot){const busy=new Set(S.appts.filter(a=>a.status==='Planifié').map(a=>a.cid));
+ return S.clients.filter(c=>c.id!==slot.fromCid&&!busy.has(c.id)&&!slot.offered.includes(c.id)).map(c=>{
+  const q=S.quotes.find(q=>q.cid===c.id&&q.status==='Envoyé');const age=c.lastPurchase?(now()-new Date(c.lastPurchase))/864e5:0;
+  let score=0,why=[];if(q){score+=60;why.push(`devis ${q.id} en attente`)}if(age>540){score+=25+Math.min(15,Math.round((age-540)/60));why.push('pneus > 18 mois')}if(c.outlet===slot.outlet){score+=20;why.push(`client ${slot.outlet}`)}
+  return{c,q,old:age>540,score,why}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score)}
+function openFreedSlot(a){const slot={id:uid(),when:a.when,outlet:a.outlet,techId:a.techId,fromAid:a.id,fromCid:a.cid,status:'Ouvert',offered:[],declined:[],reasons:{},filledBy:null,opened:now().toISOString()};S.freed.unshift(slot);offerBatch(slot)}
+function offerBatch(slot){const list=candidates(slot).slice(0,S.settings.fillN||3);
+ if(!list.length){if(slot.offered.length===slot.declined.length)slot.status='Non rempli';save();toast('Plus aucun client à qui proposer ce créneau');return}
+ list.forEach(({c,q,old,why})=>{const R=RT[c.lang]||RT.fr;slot.offered.push(c.id);slot.reasons[c.id]=why.join(' · ');
+  waTo('client',c.id,R.offer(first(c),dstr(slot.when),hhmm(slot.when),slot.outlet,q?R.whyQ(q.id,q.item):old?R.whyOld(c.size):''),{kind:'offer',slot:slot.id})});
+ save();toast(`Créneau proposé à ${list.length} client(s)`)}
+function acceptOffer(slotId,cid){const slot=S.freed.find(s=>s.id===slotId);const c=client(cid);if(!slot||!c)return;
+ if(slot.status!=='Ouvert'){waTo('client',cid,(RT[c.lang]||RT.fr).taken(first(c)));refresh();return}
+ let tk=tech(slot.techId);if(S.appts.some(x=>x.techId===tk.id&&x.when===slot.when&&x.status==='Planifié'))tk=assignTech(slot.outlet,slot.when);
+ if(!tk){toast('Plus de technicien libre sur ce créneau');return}
+ const q=S.quotes.find(q=>q.cid===cid&&q.status==='Envoyé');
+ const a={id:uid(),cid,qid:q?.id||null,when:slot.when,outlet:slot.outlet,techId:tk.id,kind:q?.kind||'tyres',qty:q?.qty||0,amount:q?.ttc||0,service:q?`${q.kind==='rims'?'Pose jantes':'Pose pneus'} ${q.item} × ${q.qty}`:`Contrôle pneus ${c.size||''} (à préciser)`,status:'Planifié',report:'',remind:'Confirmé',fromSlot:slot.id};
+ S.appts.push(a);if(q)q.status='Confirmé';slot.status='Rempli';slot.filledBy=cid;slot.newAid=a.id;c.outlet=slot.outlet;save();
+ waTo('client',cid,(RT[c.lang]||RT.fr).got(dstr(slot.when),hhmm(slot.when),slot.outlet,tk.name));
+ slot.offered.filter(x=>x!==cid&&!slot.declined.includes(x)).forEach(x=>{const o=client(x);waTo('client',x,(RT[o.lang]||RT.fr).taken(first(o)))});
+ waTo('tech',cid,`🔁 ${tk.name} : créneau ${dstr(slot.when)} ${hhmm(slot.when)} · ${slot.outlet} repris par ${c.name}\n${a.service}\nVoiture : ${c.car||'—'}`);
+ toast(`Créneau récupéré : ${c.name}`);refresh()}
+function declineOffer(slotId,cid){const slot=S.freed.find(s=>s.id===slotId);if(!slot||slot.status!=='Ouvert'||slot.declined.includes(cid))return;slot.declined.push(cid);save();
+ if(slot.offered.every(x=>slot.declined.includes(x)))offerBatch(slot);refresh()}
+function refresh(){renderPhones();if(!$('#v-crm').hidden)renderCRM()}
+
+function waBubble(m,showTo){const b=h('div',{class:'wa'},showTo?h('b',{style:'display:block;font-size:12px'},'→ '+(client(m.cid)?.name||'')):null,m.text,h('time',{},hhmm(m.ts)));
+ const sim=(...btns)=>b.append(h('div',{class:'act'},h('span',{class:'muted',style:'font-size:11px;width:100%'},'Réponse du client (simulation)'),...btns));
+ if(m.inv){const inv=S.invoices.find(i=>i.id===m.inv);if(inv&&inv.status==='En attente'){const inp=h('input',{placeholder:'Réf. transaction / n° reçu',id:'ref-'+inv.id+'-'+m.id});b.append(h('div',{class:'act'},inp,h('button',{class:'btn sm primary',onclick:()=>validatePayment(inv.id,inp.value)},'Valider')))}}
+ if(m.kind==='remind'){const a=S.appts.find(x=>x.id===m.aid);if(a&&a.status==='Planifié'&&(a.remind==='Relancé'||a.remind==='Sans réponse'))sim(h('button',{class:'btn sm',onclick:()=>clientConfirms(a.id)},'1 · Confirmer'),h('button',{class:'btn sm',onclick:()=>clientCancels(a.id)},'2 · Annuler'))}
+ if(m.kind==='offer'){const s=S.freed.find(x=>x.id===m.slot);if(s&&s.status==='Ouvert'&&!s.declined.includes(m.cid))sim(h('button',{class:'btn sm primary',onclick:()=>acceptOffer(s.id,m.cid)},'OUI'),h('button',{class:'btn sm',onclick:()=>declineOffer(s.id,m.cid)},'Non merci'))}
+ if(m.kind==='review'){const a=S.appts.find(x=>x.id===m.aid);if(a&&!a.reviewDone)sim(...[5,4,2].map(n=>h('button',{class:'btn sm',onclick:()=>clientReviews(a.id,n)},stars(n))))}
+ return b}
+
+const REM={undefined:['Relance J-1 à envoyer','mut'],null:['Relance J-1 à envoyer','mut'],'Relancé':['Relancé, en attente','warn'],'Confirmé':['Confirmé par le client','ok'],'Sans réponse':['Sans réponse · à appeler','bad']};
+function apptCard(a){const [lab,cls]=REM[a.remind]||REM.undefined;
+ const acts=[];if(!a.remind)acts.push(h('button',{class:'btn sm',onclick:()=>{sendReminder(a);toast('Relance envoyée');refresh()}},'Relancer maintenant'));
+ if(a.remind==='Relancé')acts.push(h('button',{class:'btn sm',onclick:()=>clientConfirms(a.id)},'Client confirme'),h('button',{class:'btn sm',onclick:()=>{sendReminder(a,true);toast('2e relance envoyée, RDV marqué à appeler');refresh()}},'Sans réponse'));
+ if(a.remind==='Sans réponse')acts.push(h('button',{class:'btn sm',onclick:()=>clientConfirms(a.id)},'Client confirme'));
+ acts.push(h('button',{class:'btn sm',style:'color:var(--bad)',onclick:()=>clientCancels(a.id)},'Client annule'));
+ return h('div',{class:'slot'},h('div',{class:'row',style:'justify-content:space-between'},h('span',{},h('b',{class:'mono'},hhmm(a.when)),' · ',a.outlet),h('span',{class:'st '+cls},lab)),
+  h('div',{},h('b',{},client(a.cid)?.name||'—'),a.fromSlot?h('span',{class:'st ok',style:'margin-left:6px'},'créneau récupéré'):null),h('div',{class:'muted'},a.service),techSelect(a),h('div',{class:'row',style:'margin-top:6px'},...acts))}
+function freedCard(s){const st={Ouvert:'warn',Rempli:'ok','Non rempli':'bad'}[s.status];
+ return h('div',{class:'iv'},h('div',{class:'row',style:'justify-content:space-between'},h('b',{class:'mono'},`${dstr(s.when)} ${hhmm(s.when)} · ${s.outlet}`),h('span',{class:'st '+st},s.status==='Rempli'?`Rempli par ${first(client(s.filledBy))}`:s.status)),
+  h('span',{class:'muted',style:'font-size:13px'},`Annulé par ${client(s.fromCid)?.name||'—'} · technicien ${tech(s.techId)?.name||'—'}`),
+  ...s.offered.map(cid=>{const c=client(cid);const state=s.filledBy===cid?['A pris le créneau','ok']:s.declined.includes(cid)?['A refusé','mut']:s.status==='Ouvert'?['Proposé','warn']:['Prévenu : déjà pris','mut'];
+   return h('div',{class:'row',style:'justify-content:space-between;font-size:13px;border-top:1px solid var(--line);padding-top:6px'},h('div',{style:'min-width:0'},h('b',{},c?.name||'—'),h('div',{class:'muted'},s.reasons[cid]||'')),
+    h('div',{class:'row'},h('span',{class:'st '+state[1]},state[0]),s.status==='Ouvert'&&state[0]==='Proposé'?[h('button',{class:'btn sm primary',onclick:()=>acceptOffer(s.id,cid)},'OUI'),h('button',{class:'btn sm',onclick:()=>declineOffer(s.id,cid)},'Non')]:null))}),
+  s.status==='Ouvert'?h('button',{class:'btn sm',style:'justify-self:start',onclick:()=>{offerBatch(s);refresh()}},"Proposer à d'autres clients"):null)}
+function renderAppts(){const list=S.appts.filter(a=>a.status==='Planifié').sort((a,b)=>a.when.localeCompare(b.when));const days={};list.forEach(a=>{const d=dstr(a.when);(days[d]=days[d]||[]).push(a)});
+ const tom=list.filter(a=>isTomorrow(a.when));const nm=id=>client(id)?.name||'—';
+ const agenda=list.length?h('div',{class:'agenda'},...Object.entries(days).map(([d,as])=>h('div',{class:'panel day'},h('b',{style:'font:700 20px var(--f-display);text-transform:uppercase'},d),...as.map(apptCard)))):h('div',{class:'empty'},"Aucun rendez-vous planifié. Sophie les crée dès qu'un devis est confirmé.");
+ const feed=S.wa.filter(m=>m.to==='client'&&(m.kind==='remind'||m.kind==='offer'||m.kind==='review')).slice(-8).reverse();
+ return h('div',{class:'appts-layout'},h('div',{style:'display:grid;gap:10px;align-content:start;min-width:0'},agenda),
+  h('div',{style:'display:grid;gap:12px;align-content:start;min-width:0'},
+   h('div',{class:'panel pad'},h('h3',{style:'font-size:24px;text-transform:uppercase'},'Relances J-1'),
+    h('span',{class:'muted',style:'font-size:13px'},`Sophie relance automatiquement chaque jour à ${S.settings.remindAt||'17:00'} les clients qui ont un RDV le lendemain. Réponse 1 = confirmé, 2 = annulé. Sans réponse : 2e relance et RDV marqué « à appeler ».`),
+    h('div',{class:'row'},h('span',{class:'pill'},`Demain : ${tom.length} RDV`),h('span',{class:'pill ok'},`${tom.filter(a=>a.remind==='Confirmé').length} confirmé(s)`),h('span',{class:'pill warn'},`${tom.filter(a=>a.remind==='Relancé').length} en attente`),h('span',{class:'pill bad'},`${list.filter(a=>a.callNeeded&&a.remind!=='Confirmé').length} à appeler`)),
+    h('button',{class:'btn primary',style:'justify-self:start',onclick:runReminders},'Lancer les relances de demain maintenant')),
+   h('div',{class:'panel pad'},h('h3',{style:'font-size:24px;text-transform:uppercase'},'Créneaux libérés'),
+    h('span',{class:'muted',style:'font-size:13px'},`À chaque annulation, Sophie propose le créneau aux ${S.settings.fillN||3} clients les plus pertinents : devis en attente d'abord, puis pneus de plus de 18 mois, puis clients du même magasin. Le premier qui répond OUI l'obtient.`),
+    ...(S.freed.length?S.freed.slice(0,5).map(freedCard):[h('div',{class:'empty'},'Aucune annulation pour le moment. Testez avec « Client annule » sur un RDV.')])),
+   h('div',{class:'panel pad'},h('h3',{style:'font-size:24px;text-transform:uppercase'},'Messages de Sophie'),h('div',{class:'phone-log',style:'background:var(--wa-bg);border-radius:var(--r);max-height:420px'},...(feed.length?feed.map(m=>waBubble(m,true)):[h('div',{class:'empty'},'Les relances et propositions de créneau apparaissent ici.')])))))}
+
+/* ---------------- PHOTOS (visuels provisoires + remplacement) ---------------- */
+const PHOTO_SLOTS=[
+ {id:'workshop',fr:"L’expertise à chaque étape",en:'Expertise at every step',kr:'Nou lexpertiz'},
+ {id:'bronze',fr:'Le détail qui change tout',en:'Details make the difference',kr:'Sak detay konte'},
+ {id:'stack',fr:'La performance commence ici',en:'Performance starts here',kr:'Performans koumans isi'}];
+const GENERATED_PHOTOS={workshop:'assets/workshop.png',bronze:'assets/bronze-wheel.png',rims:'assets/bronze-wheel.png',stack:'image_de4214a2 (1).jpg',waiting:'assets/workshop.png',store:'assets/workshop.png'};
+const PKEY='ctc-photos-v1';
+let PHOTOS={};try{PHOTOS=JSON.parse(localStorage.getItem(PKEY))||{}}catch(e){PHOTOS={}}
+function savePhotos(){try{localStorage.setItem(PKEY,JSON.stringify(PHOTOS));return true}catch(e){toast("Photo trop lourde pour le navigateur, essayez une image plus petite");return false}}
+
+function drawRim(x,cx,cy,r,col,spokes,tyre){
+ if(tyre){x.fillStyle='#141618';x.beginPath();x.arc(cx,cy,r*1.42,0,7);x.fill();x.strokeStyle='#23272a';x.lineWidth=r*.1;for(let i=0;i<36;i++){const a=i/36*6.283;x.beginPath();x.arc(cx,cy,r*1.34,a,a+.08);x.stroke()}
+  const tg=x.createRadialGradient(cx-r*.5,cy-r*.6,r*.2,cx,cy,r*1.45);tg.addColorStop(0,'rgba(255,255,255,.08)');tg.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=tg;x.beginPath();x.arc(cx,cy,r*1.42,0,7);x.fill()}
+ const g=x.createRadialGradient(cx-r*.35,cy-r*.45,r*.1,cx,cy,r);g.addColorStop(0,shade(col,40));g.addColorStop(.6,col);g.addColorStop(1,shade(col,-45));
+ x.fillStyle=g;x.beginPath();x.arc(cx,cy,r,0,7);x.fill();
+ x.fillStyle='#0d0f10';x.beginPath();x.arc(cx,cy,r*.86,0,7);x.fill();
+ x.fillStyle=g;for(let i=0;i<spokes;i++){x.save();x.translate(cx,cy);x.rotate(i*6.283/spokes);const w1=r*(spokes>6?.06:.1),w2=r*(spokes>6?.1:.2);
+  x.beginPath();x.moveTo(-w1,-r*.2);x.lineTo(w1,-r*.2);x.lineTo(w2,-r*.86);x.lineTo(-w2,-r*.86);x.closePath();x.fill();x.restore()}
+ x.beginPath();x.arc(cx,cy,r*.24,0,7);x.fill();x.fillStyle='#1a1c1e';x.beginPath();x.arc(cx,cy,r*.09,0,7);x.fill();
+ for(let i=0;i<5;i++){const a=i*1.2566;x.beginPath();x.arc(cx+Math.cos(a)*r*.16,cy+Math.sin(a)*r*.16,r*.025,0,7);x.fill()}
+ x.strokeStyle='rgba(255,255,255,.35)';x.lineWidth=r*.035;x.beginPath();x.arc(cx,cy,r*.95,3.6,4.9);x.stroke()}
+function shade(hex,p){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;const f=v=>Math.max(0,Math.min(255,Math.round(v+p*2.55)));return`rgb(${f(r)},${f(g)},${f(b)})`}
+function lightCone(x,cx,top,w,H,a){const g=x.createLinearGradient(0,top,0,H);g.addColorStop(0,`rgba(255,236,190,${a})`);g.addColorStop(1,'rgba(255,236,190,0)');x.fillStyle=g;x.beginPath();x.moveTo(cx-w*.15,top);x.lineTo(cx+w*.15,top);x.lineTo(cx+w,H);x.lineTo(cx-w,H);x.closePath();x.fill()}
+function drawScene(cv,kind){const x=cv.getContext('2d'),W=cv.width,H=cv.height;x.save();
+ const bg=(a,b)=>{const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,a);g.addColorStop(1,b);x.fillStyle=g;x.fillRect(0,0,W,H)};
+ if(kind==='rims'){bg('#23272b','#121416');const cols=['#C9CDD0','#A8743F','#4A4F55','#2B2E31','#D9DDE0','#8C1C1C','#B8BCC0','#A8743F'];const sp=[5,10,6,5,12,5,7,10];
+  for(let row=0;row<2;row++)for(let i=0;i<4;i++){const cx=W*(.14+i*.24),cy=H*(.3+row*.42);x.fillStyle='rgba(0,0,0,.35)';x.fillRect(cx-W*.1,cy+H*.17,W*.2,6);drawRim(x,cx,cy,H*.16,cols[row*4+i],sp[row*4+i],false)}
+  lightCone(x,W*.3,0,W*.25,H,.12);lightCone(x,W*.75,0,W*.25,H,.1)}
+ else if(kind==='bronze'){bg('#1b1d1f','#0c0d0e');for(let i=0;i<14;i++){x.fillStyle=`rgba(242,183,5,${.04+.05*((i*37)%5)/5})`;x.beginPath();x.arc((i*97)%W,(i*53)%H*.9,20+(i*13)%40,0,7);x.fill()}
+  drawRim(x,W*.62,H*.55,H*.42,'#A8743F',10,true)}
+ else if(kind==='stack'){bg('#2d3236','#1a1d20');x.fillStyle='#3a3f43';x.fillRect(0,H*.82,W,H*.18);
+  for(let col=0;col<5;col++){const n=5+(col%3);const bx=W*(.03+col*.195),bw=W*.17;for(let k=0;k<n;k++){const y=H*.82-(k+1)*H*.1;x.fillStyle='#141618';x.beginPath();x.roundRect(bx,y,bw,H*.092,H*.03);x.fill();
+   x.strokeStyle='#26292c';x.lineWidth=3;for(let t=1;t<9;t++){x.beginPath();x.moveTo(bx+bw*t/9,y+4);x.lineTo(bx+bw*t/9,y+H*.088);x.stroke()}}
+   x.fillStyle='#F2B705';x.fillRect(bx+bw*.3,H*.84,bw*.4,H*.06);x.fillStyle='#14181B';x.font=`700 ${Math.round(H*.035)}px "Barlow Condensed",sans-serif`;x.textAlign='center';x.fillText(['R14','R15','R16','R17','R18'][col],bx+bw/2,H*.885)}
+  lightCone(x,W*.5,0,W*.4,H,.1)}
+ else if(kind==='workshop'){bg('#3b4146','#2a2e32');x.fillStyle='#4a5055';x.fillRect(0,H*.66,W,H*.34);x.fillStyle='#F2B705';x.fillRect(0,H*.9,W,H*.02);
+  x.fillStyle='rgba(255,250,235,.18)';x.fillRect(W*.06,H*.1,W*.3,H*.38);x.strokeStyle='#2a2e32';x.lineWidth=6;x.strokeRect(W*.06,H*.1,W*.3,H*.38);x.beginPath();x.moveTo(W*.21,H*.1);x.lineTo(W*.21,H*.48);x.stroke();
+  x.fillStyle='#B3261E';x.fillRect(W*.5,H*.5,W*.26,H*.26);x.fillRect(W*.7,H*.12,W*.04,H*.4);x.fillRect(W*.6,H*.12,W*.14,H*.04);
+  x.fillStyle='#141618';x.beginPath();x.ellipse(W*.63,H*.48,W*.15,H*.07,0,0,7);x.fill();x.fillStyle='#8f969b';x.beginPath();x.ellipse(W*.63,H*.47,W*.08,H*.035,0,0,7);x.fill();
+  for(let i=0;i<3;i++){x.fillStyle='#141618';x.beginPath();x.roundRect(W*(.83),H*(.72-i*.1),W*.14,H*.09,12);x.fill()}
+  drawRim(x,W*.22,H*.74,H*.1,'#C9CDD0',5,true);lightCone(x,W*.63,0,W*.3,H,.12)}
+ else if(kind==='waiting'){bg('#d9d6cf','#bfbab0');x.fillStyle='#8a8378';x.fillRect(0,H*.72,W,H*.28);
+  const g=x.createLinearGradient(W*.05,0,W*.45,0);g.addColorStop(0,'#cfe6f2');g.addColorStop(1,'#eaf4f8');x.fillStyle=g;x.fillRect(W*.05,H*.12,W*.4,H*.46);x.strokeStyle='#6d665c';x.lineWidth=8;x.strokeRect(W*.05,H*.12,W*.4,H*.46);
+  x.fillStyle='#7fae6a';x.beginPath();x.ellipse(W*.18,H*.52,W*.12,H*.08,0,0,7);x.fill();
+  x.fillStyle='#f4f2ee';x.fillRect(W*.58,H*.1,W*.3,H*.1);x.fillStyle='#c9c5bd';for(let i=0;i<5;i++)x.fillRect(W*.6,H*(.16+i*.006),W*.26,2);
+  for(let i=0;i<4;i++){const cx=W*(.5+i*.12);x.fillStyle='#2f3a44';x.beginPath();x.roundRect(cx,H*.5,W*.09,H*.16,8);x.fill();x.fillRect(cx,H*.62,W*.09,H*.04);x.fillStyle='#1e252b';x.fillRect(cx+6,H*.66,5,H*.08);x.fillRect(cx+W*.09-11,H*.66,5,H*.08)}
+  x.fillStyle='#14181B';x.fillRect(W*.58,H*.28,W*.28,H*.12);x.fillStyle='#F2B705';x.font=`700 ${Math.round(H*.06)}px "Barlow Condensed",sans-serif`;x.textAlign='center';x.fillText('CTC',W*.72,H*.36)}
+ else if(kind==='store'){const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#7fb4d9');g.addColorStop(.55,'#cfe3ef');g.addColorStop(.56,'#9b9b95');g.addColorStop(1,'#6f706b');x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.fillStyle='#e9e6df';x.fillRect(W*.08,H*.18,W*.84,H*.46);x.fillStyle='#14181B';x.fillRect(W*.08,H*.18,W*.84,H*.12);
+  x.fillStyle='#F2B705';x.font=`700 ${Math.round(H*.075)}px "Barlow Condensed","Arial Narrow",sans-serif`;x.textAlign='center';x.fillText('CTC · COTTAGE TYRE CENTRE',W*.5,H*.265,W*.8);
+  x.fillStyle='#34414a';for(let i=0;i<3;i++)x.fillRect(W*(.12+i*.27),H*.34,W*.23,H*.28);
+  for(let i=0;i<3;i++)for(let k=0;k<2;k++)drawRim(x,W*(.18+i*.27+k*.11),H*.48,H*.05,['#C9CDD0','#A8743F','#4A4F55'][(i+k)%3],5,false);
+  x.fillStyle='#1d2327';x.beginPath();x.roundRect(W*.2,H*.72,W*.42,H*.12,24);x.fill();x.beginPath();x.roundRect(W*.28,H*.64,W*.24,H*.1,20);x.fill();
+  drawRim(x,W*.29,H*.85,H*.045,'#C9CDD0',5,true);drawRim(x,W*.53,H*.85,H*.045,'#C9CDD0',5,true)}
+ const v=x.createRadialGradient(W/2,H/2,H*.3,W/2,H/2,W*.75);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,.35)');x.fillStyle=v;x.fillRect(0,0,W,H);x.restore()}
+function photoNode(id,alt){if(PHOTOS[id]||GENERATED_PHOTOS[id])return h('img',{src:PHOTOS[id]||GENERATED_PHOTOS[id],alt,loading:'lazy'});const cv=h('canvas',{width:800,height:600,role:'img','aria-label':alt+' (visuel provisoire)'});drawScene(cv,id);return cv}
+function renderGallery(){const L=siteLang;$('#gallery').replaceChildren(...PHOTO_SLOTS.map((p,i)=>h('figure',{class:'shot'+(i===0?' wide':'')},photoNode(p.id,p[L]),h('figcaption',{},p[L],PHOTOS[p.id]?null:h('span',{class:'prov'},L==='en'?'Illustrative image':L==='kr'?'Imaz ilustrasion':'Visuel d’illustration')))))}
+function renderPhotoSettings(){const box=$('#photo-slots');if(!box)return;box.replaceChildren(...PHOTO_SLOTS.map(p=>{const inp=h('input',{type:'file',accept:'image/*',id:'ph-'+p.id,hidden:true});
+ inp.onchange=async()=>{const f=inp.files?.[0];if(!f)return;try{PHOTOS[p.id]=await resizeImg(f,1100);if(savePhotos()){renderPhotoSettings();renderGallery();renderBlogSite();toast('Photo remplacée')}}catch(e){toast('Image illisible, essayez une autre photo')}};
+ return h('div',{class:'ph-slot'},photoNode(p.id,p.fr),h('div',{style:'display:grid;gap:4px;min-width:0'},h('b',{style:'font-size:14px'},p.fr),h('div',{class:'row'},inp,h('button',{class:'btn sm',onclick:()=>inp.click()},PHOTOS[p.id]?'Changer':'Remplacer par une photo'),PHOTOS[p.id]?h('button',{class:'btn sm',onclick:()=>{delete PHOTOS[p.id];savePhotos();renderPhotoSettings();renderGallery();renderBlogSite()}},'Retirer'):null)))}))}
+function resizeImg(file,max){return new Promise((res,rej)=>{const fr=new FileReader();fr.onerror=rej;fr.onload=()=>{const im=new Image();im.onerror=rej;im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height));const cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);res(cv.toDataURL('image/jpeg',.78))};im.src=fr.result};fr.readAsDataURL(file)})}
+
+/* ---------------- AVIS CLIENTS ---------------- */
+const PUBLIC_REVIEWS=[
+ {name:'Waseem',date:'16 sept. 2023',stars:5,text:"Le meilleur endroit pour faire changer vos pneus. Bon prix et service. Hautement recommandé.",src:'Avis Google, repris par africabz.com (traduit)'},
+ {name:'Client Mercedes',date:'2023',stars:5,text:"Excellent service. Massive stock of tyres. Replaced my Mercedes run flat tyres from their stock holding within an hour. Comfortable air-conditioned waiting room.",src:'Avis public, africabz.com'},
+ {name:'Kushal',date:'5 août 2023',stars:5,text:"Bon et rapide service. […] Jantes et pneus montés. A fait l'alignement et l'équilibrage des roues. Bon travail. Recommandé.",src:'Avis Google, repris par africabz.com (traduit)'},
+ {name:'Client fidèle',date:'—',stars:5,text:"I have always come here since 2010 for tyres and repairs. […] Honest and well priced. English no problem.",src:'Avis public, vymaps.com'},
+ {name:'Client',date:'—',stars:5,text:"Service rapide et efficace, mon pneu n'étant pas réparable, 2 types de pneu m'ont été proposés à 1500 RS et 2500 RS.",src:'Avis public, africabz.com (traduit)'}];
+const stars=n=>'★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n);
+function renderReviewsSite(){const L=siteLang;const mine=S.reviews.filter(r=>r.status==='Publié');
+ const card=(r,badge)=>h('figure',{class:'panel rev'},h('span',{class:'stars','aria-label':r.stars+' sur 5'},stars(r.stars)),h('blockquote',{},'« '+r.text+' »'),
+  h('figcaption',{},h('b',{},r.name),h('span',{class:'muted'},[r.date||dstr(r.ts),r.car].filter(Boolean).join(' · ')),h('span',{class:'muted src'},r.src||r.source),badge?h('span',{class:'st mut',style:'justify-self:start'},badge):null));
+ $('#reviews').replaceChildren(...mine.map(r=>card(r,r.demo?(L==='en'?'demo review':'avis de démo'):null)),...PUBLIC_REVIEWS.map(r=>card(r)));
+ $('#rev-summary').textContent=L==='en'?'Public rating 3.9/5 (14 reviews, africabz.com). Reviews collected by Sophie after each visit are added here once approved.':L==='kr'?'Not piblik 3,9/5 (14 avi, africabz.com). Avi ki Sophie ramase apre sak vizit pou vinn isi apre validasion.':'Note publique 3,9/5 (14 avis, africabz.com). Les avis collectés par Sophie après chaque passage s\'ajoutent ici après validation.'}
+const REV_DEMO={5:"Service rapide, Sophie m'a envoyé le devis en 5 minutes et le montage était fait à l'heure.",4:"Bon service et bon prix, un peu d'attente au magasin.",2:"Le RDV a pris du retard et on ne m'a pas prévenu."};
+function askReview(a){const c=client(a.cid);a.reviewAsked=true;waTo('client',a.cid,{fr:`⭐ ${first(c)}, comment s'est passée votre visite chez CTC ${a.outlet} ?\nRépondez avec une note de 1 à 5 et un petit commentaire. Merci !`,en:`⭐ ${first(c)}, how was your visit to CTC ${a.outlet}?\nReply with a rating from 1 to 5 and a short comment. Thank you!`,kr:`⭐ ${first(c)}, kouma ou vizit kot CTC ${a.outlet} finn pase?\nReponn ar enn not 1 ziska 5 ek enn pti komanter. Mersi!`}[c.lang||'fr'],{kind:'review',aid:a.id})}
+function clientReviews(aid,n){const a=S.appts.find(x=>x.id===aid);if(!a||a.reviewDone)return;const c=client(a.cid);a.reviewDone=true;
+ const r={id:uid(),cid:c.id,aid,name:`${first(c)} ${(c.name.split(' ')[1]||'')[0]||''}.`.trim(),car:c.car,stars:n,text:REV_DEMO[n],ts:now().toISOString(),source:'Collecté par Sophie sur WhatsApp',status:n>=4?'À valider':'À traiter',demo:true,tech:tech(a.techId)?.name};S.reviews.unshift(r);
+ if(n>=4)waTo('client',c.id,{fr:'Merci beaucoup 🙏 Pouvez-vous aussi laisser cet avis sur Google ? Ça nous aide énormément : [lien Google de CTC]',en:'Thank you so much 🙏 Could you also post it on Google? It helps us a lot: [CTC Google link]',kr:'Mersi boukou 🙏 Eski ou kapav mett sa avi-la lor Google osi? Sa ed nou boukou: [lien Google CTC]'}[c.lang||'fr']);
+ else{waTo('client',c.id,{fr:"Merci pour votre retour, et désolée. Le responsable du magasin vous rappelle aujourd'hui.",en:"Thank you for the feedback, and sorry. The store manager will call you today.",kr:"Mersi pou ou komanter, ek eskiz. Responsab magazin-la pou rapel ou zordi."}[c.lang||'fr']);
+  waTo('acc',c.id,`⚠️ Avis ${n}/5 de ${c.name} (${c.phone}) après l'intervention du ${dstr(a.when)} à ${a.outlet}.\n« ${r.text} »\nÀ rappeler aujourd'hui.`)}
+ save();toast(`Avis ${n}/5 reçu`);refresh()}
+function renderReviewsCRM(){const pend=S.reviews.filter(r=>r.status==='À valider'),bad=S.reviews.filter(r=>r.status==='À traiter');const asked=S.appts.filter(a=>a.reviewAsked&&!a.reviewDone);
+ const all=S.reviews;const avg=all.length?(all.reduce((s,r)=>s+r.stars,0)/all.length).toFixed(1):'—';
+ const row=r=>h('div',{class:'iv'},h('div',{class:'row',style:'justify-content:space-between'},h('span',{},h('span',{class:'stars'},stars(r.stars)),' ',h('b',{},r.name),h('span',{class:'muted'},` · ${r.car||''} · technicien ${r.tech||'—'}`)),h('span',{class:'st '+({'Publié':'ok','À valider':'warn','À traiter':'bad','Refusé':'mut','Traité':'mut'}[r.status])},r.status)),
+  h('div',{},'« '+r.text+' »'),h('span',{class:'muted',style:'font-size:12px'},`${r.source} · ${dstr(r.ts)}${r.demo?' · réponse simulée (démo)':''}`),
+  h('div',{class:'row'},r.status==='À valider'?[h('button',{class:'btn sm primary',onclick:()=>{r.status='Publié';save();renderReviewsSite();renderCRM();toast('Avis publié sur le site')}},'Publier sur le site'),h('button',{class:'btn sm',onclick:()=>{r.status='Refusé';save();renderCRM()}},'Ne pas publier')]:null,
+   r.status==='À traiter'?h('button',{class:'btn sm',onclick:()=>{r.status='Traité';save();renderCRM()}},'Client rappelé, marquer traité'):null,
+   r.status==='Publié'?h('button',{class:'btn sm',onclick:()=>{r.status='À valider';save();renderReviewsSite();renderCRM()}},'Retirer du site'):null));
+ return h('div',{class:'appts-layout'},h('div',{style:'display:grid;gap:10px;align-content:start;min-width:0'},
+   h('div',{class:'row'},h('span',{class:'pill'},`Note moyenne : ${avg}`),h('span',{class:'pill warn'},`${pend.length} à valider`),h('span',{class:'pill bad'},`${bad.length} mécontent(s) à rappeler`),h('span',{class:'pill'},`${S.reviews.filter(r=>r.status==='Publié').length} publié(s)`)),
+   ...(all.length?all.map(row):[h('div',{class:'empty'},"Aucun avis collecté. Clôturez une intervention dans l'onglet Techniciens : Sophie demande l'avis du client.")])),
+  h('div',{class:'panel pad'},h('h3',{style:'font-size:24px;text-transform:uppercase'},'Comment ça marche'),
+   h('span',{class:'muted',style:'font-size:13px'},"Quand un technicien clôture une intervention, Sophie envoie au client un WhatsApp pour noter sa visite de 1 à 5. 4 ou 5 étoiles : l'avis attend votre validation avant d'être publié sur le site, et Sophie invite le client à le poster aussi sur Google. 3 étoiles ou moins : l'avis n'est pas publié, le responsable est alerté pour rappeler le client."),
+   h('b',{},`Demandes d'avis en attente (${asked.length})`),
+   ...(asked.length?asked.slice(0,6).map(a=>h('div',{class:'iv'},h('span',{},h('b',{},client(a.cid)?.name),' · ',dstr(a.when),' · ',a.outlet),h('div',{class:'act row'},h('span',{class:'muted',style:'font-size:11px;width:100%'},'Réponse du client (simulation)'),...[5,4,2].map(n=>h('button',{class:'btn sm',onclick:()=>clientReviews(a.id,n)},stars(n)))))):[h('div',{class:'empty'},'Aucune demande en attente.')])))}
+$('#rev-form').onsubmit=e=>{e.preventDefault();const name=$('#rev-name').value.trim(),text=$('#rev-text').value.trim(),n=+$('#rev-stars').value;
+ if(!name||text.length<10){toast('Indiquez votre prénom et un commentaire de quelques mots');return}
+ S.reviews.unshift({id:uid(),name,stars:n,text,ts:now().toISOString(),source:'Déposé sur le site web',status:n>=4?'À valider':'À traiter',demo:false});save();e.target.reset();
+ $('#rev-thanks').hidden=false;setTimeout(()=>$('#rev-thanks').hidden=true,5000)};
+
+/* ---------------- BLOG ---------------- */
+const SEED_POSTS=[
+ {id:'p1',cover:'stack',tag:'Conseils',title:'Comment lire la référence de votre pneu',excerpt:"205/55 R16 91V : cinq informations moulées sur le flanc, qu'il faut donner telles quelles pour recevoir le bon devis.",
+  body:["La référence est moulée sur le flanc du pneu. Prenons 205/55 R16 91V.","205 est la largeur du pneu en millimètres. 55 est la hauteur du flanc, en pourcentage de la largeur : ici environ 113 mm. R signifie que la carcasse est radiale, comme sur presque toutes les voitures. 16 est le diamètre de la jante en pouces.","91 est l'indice de charge : 615 kg par pneu. V est l'indice de vitesse : 240 km/h maximum. En changeant de pneus, gardez des indices au moins égaux à ceux d'origine.","Envoyez simplement cette référence à Sophie sur WhatsApp, ou une photo du flanc : elle vous propose trois pneus en stock dans la bonne dimension."]},
+ {id:'p2',cover:'workshop',tag:'Sécurité',title:'Saison des pluies : quand changer vos pneus ?',excerpt:"Sur route mouillée, la profondeur des rainures fait toute la différence. Le test à faire en 30 secondes.",
+  body:["Les rainures du pneu évacuent l'eau. Plus elles sont usées, plus le risque d'aquaplaning augmente, surtout pendant les grosses averses de l'été austral.","Chaque pneu porte des témoins d'usure : de petits pavés moulés au fond des rainures, à 1,6 mm. Quand la bande de roulement arrive à leur niveau, le pneu doit être remplacé.","Pour garder une bonne adhérence sur le mouillé, beaucoup de manufacturiers conseillent de changer dès 3 mm. Vérifiez aussi les flancs : une hernie ou une coupure impose un remplacement immédiat.","Passez à Cottage ou Bagatelle : le contrôle de l'usure et de la pression est gratuit."]},
+ {id:'p3',cover:'rims',tag:'Jantes',title:'Changer de jantes : PCD, déport et alésage expliqués',excerpt:"Trois mesures décident si une jante va sur votre voiture. On vous les explique avant de choisir parmi nos 7 coloris.",
+  body:["Le PCD (entraxe) donne le nombre de boulons et le diamètre du cercle sur lequel ils sont placés : 4x100 signifie 4 boulons sur un cercle de 100 mm. Il doit correspondre exactement à votre moyeu.","Le déport (ET, en mm) indique où se place la jante par rapport au milieu de sa largeur. Un ET trop faible fait dépasser la roue de l'aile, un ET trop grand la rapproche des suspensions.","L'alésage est le diamètre du trou central. Si la jante a un alésage plus grand que le moyeu, on pose des bagues de centrage : elles sont fournies avec nos jantes CTC Wheels.","Si vous ne connaissez pas votre PCD, dites-le à Sophie : le technicien le vérifie avant le montage."]},
+ {id:'p4',cover:'bronze',tag:'Entretien',title:'Pression des pneus : le bon réflexe une fois par mois',excerpt:"La bonne pression n'est pas celle écrite sur le pneu. Où la trouver, et pourquoi la vérifier à froid.",
+  body:["La pression recommandée pour votre voiture est indiquée sur une étiquette dans l'encadrement de la portière conducteur, ou dans la trappe à carburant. Le chiffre moulé sur le pneu est une pression maximale, pas la pression d'usage.","Mesurez à froid, avant d'avoir roulé plus de quelques kilomètres. Un pneu sous-gonflé s'use plus vite sur les bords et fait consommer davantage ; un pneu trop gonflé s'use au centre et adhère moins.","Si vous partez chargé ou avec toute la famille, suivez la valeur « charge » de l'étiquette.","Nos techniciens contrôlent la pression à chaque passage, même pour un simple conseil."]}];
+function postCover(p){return photoNode(p.cover,p.title)}
+function renderBlogSite(){const L=siteLang;const posts=S.posts.filter(p=>p.status==='Publié').slice(0,6);
+ $('#blog-grid').replaceChildren(...posts.map(p=>h('article',{class:'post'},h('div',{class:'cover'},postCover(p)),h('div',{class:'post-b'},h('span',{class:'eyebrow'},p.tag+' · '+dstr(p.date)),h('h3',{},p.title),h('p',{class:'muted'},p.excerpt),
+  h('button',{class:'btn sm',style:'justify-self:start',onclick:()=>openPost(p)},L==='en'?'Read':L==='kr'?'Lir':"Lire l'article")))));
+ $('#blog-note').hidden=L==='fr'}
+function openPost(p){const d=h('div',{class:'doc article'},h('div',{class:'cover'},postCover(p)),h('span',{class:'eyebrow'},p.tag+' · '+dstr(p.date)+' · Équipe CTC'),h('h2',{style:'font-size:34px;text-transform:uppercase'},p.title),...p.body.map(t=>h('p',{},t)),
+ h('button',{class:'btn primary',style:'justify-self:start','data-go':'sophie',onclick:()=>$('.modal')?.remove()},'Poser une question à Sophie'));modal(d)}
+let draft=null;
+function renderBlogAdmin(){const list=S.posts.slice().sort((a,b)=>b.date.localeCompare(a.date));
+ $('#post-list').replaceChildren(...list.map(p=>h('div',{class:'iv'},h('div',{class:'row',style:'justify-content:space-between'},h('b',{},p.title),h('span',{class:'st '+(p.status==='Publié'?'ok':'warn')},p.status)),
+  h('span',{class:'muted',style:'font-size:13px'},`${p.tag} · ${dstr(p.date)}${p.ai?' · écrit avec Sophie':''}`),
+  h('div',{class:'row'},h('button',{class:'btn sm',onclick:()=>openPost(p)},'Aperçu'),
+   h('button',{class:'btn sm'+(p.status==='Publié'?'':' primary'),onclick:()=>{p.status=p.status==='Publié'?'Brouillon':'Publié';if(p.status==='Publié')p.date=p.date||now().toISOString();save();renderBlogAdmin();renderBlogSite();toast(p.status==='Publié'?'Article publié sur le site':'Article retiré du site')}},p.status==='Publié'?'Dépublier':'Publier'),
+   h('button',{class:'btn sm',onclick:()=>{$('#vid-topic').value=p.title;go('video');toast('Sujet envoyé au studio vidéo')}},'En faire une vidéo'),
+   h('button',{class:'btn sm',onclick:()=>{$('#camp-goal').append(h('option',{},'Partager : '+p.title));$('#camp-goal').value='Partager : '+p.title;go('camp');toast('Article prêt à partager en campagne')}},'Envoyer aux clients')))))}
+$('#post-gen').onclick=async()=>{const topic=$('#post-topic').value.trim();if(!topic){toast("Indiquez le sujet de l'article");return}
+ const b=$('#post-gen');b.disabled=true;$('#post-prev').replaceChildren(h('div',{class:'muted'},'Sophie écrit…'));
+ const prompt=`Tu écris le blog de Cottage Tyre Centre (CTC), spécialiste pneus et jantes à l'île Maurice (magasins à Cottage et Bagatelle Mall, jantes CTC Wheels, distributeur Michelin, assistante Sophie sur WhatsApp 5775 7242). Écris un article de blog en français, utile et concret, pour des automobilistes mauriciens. Sujet : ${topic}. Angle : ${$('#post-angle').value}.
+Contraintes : 4 à 6 paragraphes courts, phrases simples, aucun chiffre réglementaire ou prix inventé, termine par une invitation à écrire à Sophie ou à passer en magasin.
+Réponds uniquement en JSON : {"title": string (max 70 caractères), "excerpt": string (max 160 caractères), "tag": "Conseils"|"Sécurité"|"Jantes"|"Entretien"|"Actus", "body": [string, ...]}`;
+ let out=null;if(sample){try{out=await sample.json(prompt,{modelTier:'default',cache:false})}catch(e){aiFail(e)}}
+ let ai=!!out;if(!out||!Array.isArray(out.body))out={title:topic,excerpt:`Nos conseils sur : ${topic.toLowerCase()}.`,tag:'Conseils',body:[`Voici l'essentiel à savoir sur ce sujet : ${topic.toLowerCase()}.`,"Paragraphe à compléter par l'équipe CTC : Sophie écrit l'article complet quand l'IA est disponible.","Une question ? Écrivez à Sophie sur WhatsApp au 5775 7242 ou passez à Cottage ou Bagatelle."]},ai=false;
+ draft={id:'p'+uid(),cover:['stack','workshop','rims','bronze','waiting','store'][S.posts.length%6],tag:out.tag||'Conseils',title:String(out.title),excerpt:String(out.excerpt||''),body:out.body.map(String),status:'Brouillon',date:now().toISOString(),ai};
+ $('#post-prev').replaceChildren(h('b',{style:'font:700 24px var(--f-display);text-transform:uppercase'},draft.title),h('span',{class:'muted'},draft.excerpt),...draft.body.map(t=>h('p',{style:'margin:0'},t)),
+  h('div',{class:'row'},h('button',{class:'btn primary',onclick:()=>{S.posts.unshift(draft);save();renderBlogAdmin();$('#post-prev').replaceChildren(h('div',{class:'muted'},'Brouillon enregistré. Publiez-le depuis la liste.'));draft=null}},'Enregistrer le brouillon')));b.disabled=false};
+
+function ensureContent(){let ch=false;if(!S.posts){S.posts=SEED_POSTS.map((p,i)=>({...p,status:'Publié',date:daysAgo(4+i*9)}));ch=true}if(!S.reviews){S.reviews=[];ch=true}if(ch)save()}
+ensureContent();
+
+/* ---------------- CRM ---------------- */
+let crmTab='clients';
+$$('#crm-tabs .subtab').forEach(b=>b.onclick=()=>{crmTab=b.dataset.s;$$('#crm-tabs .subtab').forEach(x=>x.setAttribute('aria-selected',x===b));renderCRM()});
+const within=(iso,days)=>(now()-new Date(iso))/864e5<=days&&new Date(iso)<=now();
+function renderCRM(){const pend=S.invoices.filter(i=>i.status!=='Payée'),paid=S.invoices.filter(i=>i.status==='Payée');const up=S.appts.filter(a=>a.status==='Planifié');
+ const done30=S.appts.filter(a=>a.status==='Terminé'&&within(a.doneAt||a.when,30));
+ const k=(v,l)=>h('div',{class:'panel kpi'},h('div',{class:'v'},v),h('span',{class:'muted',style:'font-size:13px'},l));
+ $('#kpis').replaceChildren(k(S.clients.length,'Clients'),k(S.quotes.length,'Devis envoyés'),k(up.length,'RDV planifiés'),k(done30.length,'Interventions (30 j)'),k(`${S.freed.filter(f=>f.status==='Rempli').length} / ${S.freed.length}`,'Créneaux annulés récupérés'),k(rs(pend.reduce((a,i)=>a+i.ttc,0)),`${pend.length} paiement(s) en attente`),k(rs(paid.reduce((a,i)=>a+i.ttc,0)),'Encaissé'));
+ const body=$('#crm-body');const tbl=(heads,rows,empty)=>rows.length?h('div',{class:'tbl-wrap'},h('table',{class:'tbl'},h('thead',{},h('tr',{},...heads.map(x=>h('th',{class:x.endsWith(' ')?'n':''},x.trim())))),h('tbody',{},...rows))):h('div',{class:'empty'},empty);
+ const nm=id=>client(id)?.name||'—';
+ if(crmTab==='clients')body.replaceChildren(tbl(['Client','Facturation','Contact','Voiture','Pneus','Pièce ID','Magasin','Dernier achat'],S.clients.map(c=>h('tr',{},
+  h('td',{},h('b',{},c.name),h('div',{class:'muted',style:'font-size:12px'},[c.source,c.example?'exemple':null].filter(Boolean).join(' · '))),
+  h('td',{},c.type==='biz'?[h('b',{},c.company?.name||'—'),h('div',{class:'mono muted',style:'font-size:12px'},`BRN ${c.company?.brn||'—'} · TVA ${c.company?.vat||'—'}`)]:c.type==='ind'?'Particulier':h('span',{class:'muted'},'—'),h('div',{class:'muted',style:'font-size:12px'},c.address||'')),
+  h('td',{},c.phone,h('div',{class:'muted',style:'font-size:12px'},c.email||'—')),h('td',{},c.car||'—'),h('td',{class:'mono'},c.size||'—'),
+  h('td',{},c.idDoc?h('button',{class:'btn sm',onclick:()=>openImg(c)},h('img',{src:c.idDoc.thumb,alt:'',style:'width:36px;height:24px;object-fit:cover;border-radius:2px'}),'Voir'):c.type==='biz'?h('span',{class:'muted'},'n/a'):h('span',{class:'st mut'},'manquante')),
+  h('td',{},c.outlet||'—'),h('td',{},c.lastPurchase?ago(c.lastPurchase):'—'))),'Aucun client.'));
+ if(crmTab==='quotes')body.replaceChildren(tbl(['N°','Client','Article','Paiement','Total TTC ','Envoi','Statut'],S.quotes.map(q=>h('tr',{},h('td',{class:'mono'},q.id),h('td',{},q.bill?.type==='biz'?q.bill.company.name:nm(q.cid)),h('td',{},`${q.item} × ${q.qty}`),h('td',{},q.method?payName(q.method):'—'),h('td',{class:'n'},rs(q.ttc)),h('td',{},[q.sentWa?'WhatsApp':null,q.sentMail?'Email':null].filter(Boolean).join(' · ')||'Chat'),h('td',{},h('span',{class:'st '+(q.status==='Confirmé'?'ok':'warn')},q.status)))),"Les devis créés par Sophie apparaîtront ici. Faites un essai dans l'onglet Sophie."));
+ if(crmTab==='appts')body.replaceChildren(renderAppts());
+ if(crmTab==='reviews')body.replaceChildren(renderReviewsCRM());
+ if(crmTab==='techs')body.replaceChildren(h('div',{class:'techs'},...S.techs.map(techReport)));
+ if(crmTab==='invoices')body.replaceChildren(tbl(['N°','Client','Mode','Montant ','Statut','Réf. transaction','Action'],S.invoices.map(i=>{const inp=h('input',{placeholder:'Réf. / n° reçu',class:'mono',style:'width:130px;border:1px solid var(--line);border-radius:4px;padding:4px 8px;background:var(--surface)'});
+  return h('tr',{},h('td',{class:'mono'},i.id),h('td',{},i.bill?.type==='biz'?i.bill.company.name:nm(i.cid)),h('td',{},payName(i.method||'juice')),h('td',{class:'n'},rs(i.ttc)),h('td',{},h('span',{class:'st '+(i.status==='Payée'?'ok':i.status==='Annulée'?'mut':i.status==='En attente'?'warn':'bad')},i.status)),h('td',{class:'mono'},i.ref||'—'),
+   h('td',{},h('div',{class:'row'},i.status!=='En attente'?null:[inp,h('button',{class:'btn sm primary',onclick:()=>validatePayment(i.id,inp.value)},'Valider')],h('button',{class:'btn sm',onclick:()=>openInvoice(i)},'Voir'))))}),'Aucune facture pour le moment.'))}
+function techSelect(a){const sel=h('select',{id:'tech-'+a.id,'aria-label':'Technicien',style:'margin-top:6px;border:1px solid var(--line);border-radius:4px;padding:3px 6px;background:var(--surface);font-size:13px'},...S.techs.filter(t=>t.outlet===a.outlet).map(t=>h('option',{value:t.id,selected:t.id===a.techId},'🔧 '+t.name)));
+ sel.onchange=()=>{const t=tech(sel.value);if(S.appts.some(x=>x!==a&&x.techId===t.id&&x.when===a.when&&x.status==='Planifié')){toast(`${t.name} a déjà une intervention à cette heure`);sel.value=a.techId;return}
+  a.techId=t.id;save();waTo('tech',a.cid,`🔧 ${t.name}, intervention réattribuée\n${dstr(a.when)} ${hhmm(a.when)} · ${a.outlet}\n${a.service}`);toast(`RDV attribué à ${t.name}`)};return sel}
+function techReport(t){const mine=S.appts.filter(a=>a.techId===t.id);const done=mine.filter(a=>a.status==='Terminé'&&within(a.doneAt||a.when,30));const up=mine.filter(a=>a.status==='Planifié');
+ const tyres=done.filter(a=>a.kind==='tyres').reduce((s,a)=>s+a.qty,0),rims=done.filter(a=>a.kind==='rims').reduce((s,a)=>s+a.qty,0),ca=done.reduce((s,a)=>s+a.amount,0);
+ const st=(v,l)=>h('div',{},h('div',{class:'tv'},v),h('span',{class:'muted',style:'font-size:12px'},l));
+ const rows=mine.slice().sort((a,b)=>b.when.localeCompare(a.when)).slice(0,8).map(a=>{const note=h('input',{placeholder:'Compte rendu (usure, pression, remarques)',id:'rep-'+a.id,class:'rep-in'});
+  return h('div',{class:'iv'},h('div',{class:'row',style:'justify-content:space-between'},h('span',{class:'mono',style:'font-size:13px'},`${dstr(a.when)} ${hhmm(a.when)}`),h('span',{class:'st '+(a.status==='Terminé'?'ok':a.status==='Annulé'?'mut':'warn')},a.status)),
+   h('div',{},h('b',{},client(a.cid)?.name||'—'),' · ',h('span',{class:'muted'},a.service)),
+   a.status==='Terminé'?h('div',{class:'muted',style:'font-size:13px'},'📝 '+(a.report||'—')):a.status==='Annulé'?h('div',{class:'muted',style:'font-size:13px'},'Annulé par le client'):h('div',{class:'row'},note,h('button',{class:'btn sm primary',onclick:()=>closeAppt(a.id,note.value)},'Clôturer')))});
+ return h('div',{class:'panel tech'},h('div',{class:'row',style:'justify-content:space-between'},h('div',{},h('h3',{style:'font-size:26px;text-transform:uppercase'},t.name),h('span',{class:'muted',style:'font-size:13px'},`${t.outlet} · ${t.skills} · ${t.wa} · exemple`)),h('span',{class:'pill'},`${up.length} à venir`)),
+  h('div',{class:'tstats'},st(done.length,'Terminées 30 j'),st(tyres,'Pneus posés'),st(rims,'Jantes posées'),st(rs(ca),'CA interventions')),
+  h('div',{class:'ivs'},...(rows.length?rows:[h('div',{class:'empty'},'Aucune intervention.')])))}
+function closeAppt(id,note){const a=S.appts.find(x=>x.id===id);if(!a)return;a.status='Terminé';a.report=note.trim()||'RAS';a.doneAt=now().toISOString();save();
+ waTo('client',a.cid,`🛞 Intervention terminée chez CTC ${a.outlet} par ${tech(a.techId)?.name}. Votre véhicule est prêt. Merci !`);askReview(a);save();toast('Intervention clôturée, avis demandé au client');renderCRM()}
+function ago(d){const n=Math.round((now()-new Date(d))/864e5);return n<1?"aujourd'hui":n<60?`il y a ${n} j`:`il y a ${Math.round(n/30)} mois`}
+function modal(node){const m=h('div',{class:'modal',onclick:e=>{if(e.target===m)m.remove()}},node);node.append(h('button',{class:'btn',onclick:()=>m.remove()},'Fermer'));$('#modal-root').append(m)}
+function openInvoice(i){const d=invoiceCard(i);if(i.status==='Payée')d.prepend(h('span',{class:'stamp'},'PAYÉE'));modal(d)}
+function openImg(c){modal(h('div',{class:'doc'},h('b',{},`Pièce d'identité — ${c.name}`),h('img',{src:c.idDoc.thumb,alt:"Pièce d'identité",style:'width:100%;border-radius:6px'}),h('span',{class:'muted',style:'font-size:12px'},`Reçue ${dstr(c.idDoc.at)} · accès réservé à la facturation`)))}
+
+/* ---------------- CAMPAIGNS ---------------- */
+const SEGS=[
+ {id:'old',name:'Pneus achetés il y a plus de 18 mois',f:c=>c.lastPurchase&&(now()-new Date(c.lastPurchase))/864e5>540},
+ {id:'r15',name:'Voitures en 15" et 17" (promo jantes)',f:c=>/R1[57]$/.test(c.size||'')},
+ {id:'bag',name:'Clients du magasin Bagatelle',f:c=>c.outlet==='Bagatelle'},
+ {id:'suv',name:'SUV et pick-up (17" et plus)',f:c=>{const p=parseSize(c.size);return p&&p.r>=16&&p.w>=225}},
+ {id:'all',name:'Tous les clients',f:()=>true}];
+let seg='old',campOut=null;
+function renderCamp(){$('#seg-list').replaceChildren(...SEGS.map(s=>{const n=S.clients.filter(s.f).length;return h('button',{class:'seg-opt','aria-pressed':s.id===seg,onclick:()=>{seg=s.id;renderCamp()}},h('span',{},s.name),h('span',{class:'pill'},n))}));
+ $('#camp-count').textContent=`${S.clients.filter(SEGS.find(s=>s.id===seg).f).length} destinataires`;
+ $('#camp-hist').replaceChildren(...(S.campaigns.length?S.campaigns.slice(-5).reverse().map(c=>h('div',{},`${dstr(c.ts)} — ${c.goal} → ${c.n} clients (${c.seg})`)):[h('span',{},'Aucune campagne envoyée.')]))}
+$('#camp-gen').onclick=async()=>{const s=SEGS.find(x=>x.id===seg),list=S.clients.filter(s.f),goal=$('#camp-goal').value,lang=$('#camp-lang').value;
+ if(!list.length){toast('Ce segment est vide');return}
+ const btn=$('#camp-gen');btn.disabled=true;$('#camp-wa').textContent='Sophie écrit…';$('#camp-mail').textContent='';
+ const L={fr:'français',en:'anglais',kr:'créole mauricien (kreol morisien)',auto:'français'}[lang];
+ const prompt=`Tu es la responsable marketing de Cottage Tyre Centre (CTC), pneus et jantes à Maurice (magasins Forbach Road Cottage — WhatsApp 5775 7242 — et Bagatelle Mall — WhatsApp 5251 7242). Écris une campagne pour le segment "${s.name}" (${list.length} clients). Objectif : ${goal}. Langue : ${L}.
+Utilise les variables {prenom}, {voiture}, {taille} dans les messages. WhatsApp : 350 caractères max, ton local et chaleureux, 1-2 emojis, un appel à l'action clair (répondre à Sophie ou passer en magasin). Email : un objet accrocheur et un corps de 80-120 mots. N'invente aucun prix ni pourcentage de remise.
+Réponds uniquement en JSON : {"whatsapp": string, "email_subject": string, "email_body": string}`;
+ let out=null;
+ if(sample){try{out=await sample.json(prompt,{modelTier:'default'})}catch(e){aiFail(e)}}
+ if(!out){const tpl={fr:{whatsapp:`Bonjour {prenom} 👋 C'est Sophie de CTC. Vos pneus {taille} sur votre {voiture} ont peut-être besoin d'un contrôle. Passez à Cottage ou Bagatelle, ou répondez à ce message pour recevoir 3 propositions et un devis. 🛞`,email_subject:'{prenom}, vos pneus {taille} sont-ils prêts pour la route ?',email_body:`Bonjour {prenom},\n\nPour votre {voiture}, nous avons en stock plusieurs pneus en {taille}, du modèle économique au premium Michelin. ${goal}.\n\nRépondez à cet email ou écrivez à Sophie sur WhatsApp : elle vous envoie trois propositions et un devis en quelques minutes, puis réserve votre passage à Cottage ou Bagatelle.\n\nL'équipe CTC`},
+  en:{whatsapp:`Hi {prenom} 👋 Sophie from CTC here. Your {taille} tyres on your {voiture} may be due for a check. Drop by Cottage or Bagatelle, or reply to get 3 options and a quote. 🛞`,email_subject:'{prenom}, are your {taille} tyres road-ready?',email_body:`Hi {prenom},\n\nFor your {voiture}, we have several {taille} tyres in stock, from budget to Michelin premium. ${goal}.\n\nReply to this email or message Sophie on WhatsApp: she'll send three options and a quote within minutes, then book your slot.\n\nThe CTC team`},
+  kr:{whatsapp:`Bonzour {prenom} 👋 Sophie CTC isi. Pne {taille} lor ou {voiture} kapav bizin enn kontrol. Pas kot nou Cottage ouswa Bagatelle, ouswa reponn sa mesaz-la pou gagn 3 propozision ek enn devi. 🛞`,email_subject:'{prenom}, ou pne {taille} pare pou la rout?',email_body:`Bonzour {prenom},\n\nPou ou {voiture}, nou ena plizir pne {taille} dan stok, depi ekonomik ziska Michelin premium.\n\nReponn sa email-la ouswa ekrir Sophie lor WhatsApp: li avoy ou trwa propozision ek enn devi, apre li rezerv ou ler.\n\nLekip CTC`}};
+  out=tpl[lang==='auto'?'fr':lang]}
+ campOut={...out,seg:s.name,list,goal,lang};const ex=list[0],fill=t=>String(t||'').replaceAll('{prenom}',ex.name.split(' ')[0]).replaceAll('{voiture}',ex.car).replaceAll('{taille}',ex.size);
+ $('#camp-wa').textContent=`Aperçu pour ${ex.name} :\n\n`+fill(out.whatsapp);$('#camp-mail').textContent=fill(out.email_subject)+'\n\n'+fill(out.email_body);$('#camp-send').disabled=false;btn.disabled=false};
+$('#camp-send').onclick=()=>{if(!campOut)return;S.campaigns.push({ts:now().toISOString(),goal:campOut.goal,seg:campOut.seg,n:campOut.list.length});save();$('#camp-send').disabled=true;toast(`${campOut.list.length} WhatsApp et emails mis en file d'envoi`);renderCamp()};
+
+/* ---------------- VIDEO ---------------- */
+let vid=null;
+$('#vid-gen').onclick=async()=>{const b=$('#vid-gen');b.disabled=true;$('#vid-hook').textContent='Sophie écrit le script…';$('#vid-scenes').replaceChildren();
+ const topic=$('#vid-topic').value,plat=$('#vid-plat').value,lang=$('#vid-lang').value,len=parseInt($('#vid-len').value);
+ const prompt=`Tu écris des vidéos courtes pour ${plat} pour Cottage Tyre Centre (CTC), pneus et jantes CTC Wheels à Maurice (Cottage et Bagatelle Mall, WhatsApp 5775 7242). Sujet : ${topic}. Durée totale : ${len} secondes, format vertical 9:16. Langue du texte à l'écran et de la voix off : ${{fr:'français',en:'anglais',kr:'créole mauricien'}[lang]}.
+Les plans doivent pouvoir se tourner au téléphone dans le magasin (atelier, jantes, montage, client). Un hook fort dans les 2 premières secondes, un appel à l'action final. N'invente pas de prix.
+Réponds uniquement en JSON : {"title": string, "hook": string, "scenes": [{"seconds": number, "shot": string, "on_screen": string, "voiceover": string}], "caption": string, "hashtags": [string]} avec 4 à 6 scènes dont la somme fait ${len} s. on_screen : 6 mots maximum.`;
+ let out=null;if(sample){try{out=await sample.json(prompt,{modelTier:'default',cache:false})}catch(e){aiFail(e)}}
+ if(!out)out={title:topic,hook:lang==='kr'?'Ou zant fatige? Gete sa!':lang==='en'?'Tired rims? Watch this.':'Vos jantes font triste mine ?',scenes:[
+  {seconds:3,shot:'Gros plan sur une vieille jante rayée, puis coupe franche',on_screen:lang==='kr'?'Avan…':'Avant…',voiceover:lang==='kr'?'Ou zant fatige?':'Vos jantes sont fatiguées ?'},
+  {seconds:6,shot:'Travelling le long du mur de jantes bronze 15"',on_screen:'Collection bronze 15"',voiceover:lang==='kr'?'Nouvo koleksion bronz finn arive.':'La nouvelle collection bronze est arrivée.'},
+  {seconds:8,shot:'Montage accéléré sur la machine, équilibrage',on_screen:lang==='kr'?'Monte mem zour':'Montée le jour même',voiceover:lang==='kr'?'Nou monte ek balans li mem zour.':'On monte et on équilibre le jour même.'},
+  {seconds:7,shot:'Voiture terminée, rotation lente de la roue',on_screen:lang==='kr'?'Apre!':'Après !',voiceover:lang==='kr'?'Gete diferans-la.':'Regardez la différence.'},
+  {seconds:6,shot:'Logo CTC + numéro WhatsApp à l\'écran',on_screen:'WhatsApp 5775 7242',voiceover:lang==='kr'?'Ekrir Sophie lor WhatsApp.':'Écrivez à Sophie sur WhatsApp.'}],
+  caption:`${topic} 🛞 Cottage & Bagatelle · WhatsApp 5775 7242`,hashtags:['#CTCWheels','#mauritius','#carmauritius','#TiresAndRims','#fypmauritius']};
+ vid={...out,plat};b.disabled=false;$('#vid-add').disabled=false;
+ $('#vid-hook').textContent=out.hook;$('#vid-scenes').replaceChildren(...(out.scenes||[]).map((s,i)=>h('div',{class:'scene'},h('span',{class:'t mono'},s.seconds+'s'),h('div',{},h('b',{},s.on_screen),h('div',{class:'muted',style:'font-size:13px'},'🎥 '+s.shot),h('div',{style:'font-size:13px'},'🎙 '+s.voiceover)))));
+ $('#vid-cap').textContent=(out.caption||'')+'\n\n'+(out.hashtags||[]).join(' ');drawFrame(0,null)};
+let raf=null;
+function drawFrame(t,sc){const c=$('#vid-canvas'),x=c.getContext('2d'),W=c.width,H=c.height;x.fillStyle='#15181a';x.fillRect(0,0,W,H);
+ const cx=W/2,cy=H*.42,R=W*.34;x.save();x.translate(cx,cy);x.rotate(t*1.6);x.fillStyle='#222';x.beginPath();x.arc(0,0,R,0,7);x.fill();x.strokeStyle='#333';x.lineWidth=R*.14;for(let i=0;i<30;i++){x.beginPath();x.arc(0,0,R*.93,i/30*6.283,i/30*6.283+.1);x.stroke()}
+ x.fillStyle='#b07a45';x.beginPath();x.arc(0,0,R*.58,0,7);x.fill();x.fillStyle='#15181a';for(let i=0;i<5;i++){x.save();x.rotate(i*1.2566);x.beginPath();x.moveTo(-R*.07,-R*.14);x.lineTo(R*.07,-R*.14);x.lineTo(R*.17,-R*.52);x.lineTo(-R*.17,-R*.52);x.fill();x.restore()}x.restore();
+ const text=sc?sc.on_screen:(vid?vid.hook:'CTC · Studio vidéo');x.fillStyle='#F2B705';x.font='700 58px "Barlow Condensed", Arial Narrow, sans-serif';x.textAlign='center';
+ wrap(x,String(text).toUpperCase(),cx,H*.78,W*.84,62);x.fillStyle='#fff';x.font='600 26px "IBM Plex Sans", sans-serif';x.fillText('CTC · COTTAGE TYRE CENTRE',cx,H*.95);
+ if(vid){x.fillStyle='rgba(255,255,255,.2)';x.fillRect(40,40,W-80,6);x.fillStyle='#F2B705';const tot=(vid.scenes||[]).reduce((a,s)=>a+(+s.seconds||0),0)||1;x.fillRect(40,40,(W-80)*Math.min(1,t/tot),6)}}
+function wrap(x,t,cx,y,maxW,lh){const words=t.split(' ');let line='',lines=[];for(const w of words){const test=line?line+' '+w:w;if(x.measureText(test).width>maxW&&line){lines.push(line);line=w}else line=test}lines.push(line);lines.forEach((l,i)=>x.fillText(l,cx,y+i*lh-(lines.length-1)*lh/2))}
+$('#vid-play').onclick=()=>{if(!vid){toast("Écrivez d'abord le script");return}cancelAnimationFrame(raf);const st=performance.now();const sc=vid.scenes||[];const tot=sc.reduce((a,s)=>a+(+s.seconds||0),0);
+ const loop=n=>{const t=(n-st)/1000;let acc=0,cur=sc[sc.length-1];for(const s of sc){acc+=+s.seconds||0;if(t<acc){cur=s;break}}drawFrame(t,cur);if(t<tot)raf=requestAnimationFrame(loop)};raf=requestAnimationFrame(loop)};
+$('#vid-add').onclick=()=>{if(!vid)return;S.videos.push({id:uid(),title:vid.title||$('#vid-topic').value,stage:'Script',plat:vid.plat});save();renderKanban();$('#vid-add').disabled=true;toast('Ajouté au planning')};
+const STAGES=['Idée','Script','Tournage','Publié'];
+function renderKanban(){$('#kanban').replaceChildren(...STAGES.map((st,si)=>h('div',{class:'col'},h('span',{class:'eyebrow'},st+' · '+S.videos.filter(v=>v.stage===st).length),...S.videos.filter(v=>v.stage===st).map(v=>h('div',{class:'card'},h('b',{},v.title),h('span',{class:'muted'},v.plat),h('div',{class:'row'},si>0?h('button',{class:'btn sm',onclick:()=>{v.stage=STAGES[si-1];save();renderKanban()}},'←'):null,si<3?h('button',{class:'btn sm',onclick:()=>{v.stage=STAGES[si+1];save();renderKanban()}},'Étape suivante →'):h('span',{class:'st ok'},'En ligne')))))))}
+
+/* ---------------- SETTINGS ---------------- */
+function renderSettings(){$('#set-acc').value=S.settings.acc;$('#set-vat').value=S.settings.vat;$('#set-juice').value=S.settings.juice;$('#set-bank').value=S.settings.bank||'';$('#set-remind').value=S.settings.remindAt||'17:00';$('#set-filln').value=S.settings.fillN||3}
+$('#set-save').onclick=()=>{S.settings.acc=$('#set-acc').value.trim()||S.settings.acc;S.settings.vat=Math.max(0,Math.min(30,+$('#set-vat').value||15));S.settings.juice=$('#set-juice').value.trim()||S.settings.juice;S.settings.bank=$('#set-bank').value.trim()||S.settings.bank;S.settings.remindAt=$('#set-remind').value||'17:00';S.settings.fillN=Math.max(1,Math.min(10,+$('#set-filln').value||3));save();renderPhones();toast('Réglages enregistrés')};
+let resetArm=false;$('#set-reset').onclick=e=>{if(!resetArm){resetArm=true;e.target.textContent='Cliquez encore pour confirmer';setTimeout(()=>{resetArm=false;e.target.textContent='Réinitialiser toutes les données'},4000);return}S=seed();ensureContent();save();startChat();renderSite();toast('Données réinitialisées');resetArm=false;e.target.textContent='Réinitialiser toutes les données'};
+
+/* ---------------- boot ---------------- */
+renderSite();renderPhones();drawFrame(0,null);
+document.fonts?.ready.then(()=>{decode();drawFrame(0,null)});
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>decode());
+</script>
+
+</body></html>
+<script src="assets/three.min.js"></script>
+<script src="assets/experience.js"></script>
